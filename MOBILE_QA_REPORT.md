@@ -41,12 +41,14 @@
 
 ---
 
-## Рекомендации
+## Правки в исходниках стейджа (ждут `apply-staging` / rebuild образа)
 
-1. Шапка: `min-width/min-height: 44px` на меню, вход, лого-игры (padding, не только иконка 24px).
-2. Убрать дубли в drawer: один список разделов **или** чипы, не оба с теми же URL.
-3. Honeypot `website` — `sr-only` / `position:absolute; left:-9999px`, не в таб-потоке.
-4. Cookie и футер: увеличить hit-area (`padding` / `::after`).
-5. Когда будет PostHog: heatmap mobile `viewport_width_max=480` и rageclick на шапку.
+Контейнер не монтирует `src/` — на живом `ty` пока старая вёрстка.
 
-Исходный код портала на VPS (`/opt/sochi-portal-staging`); в этом репозитории только отчёт.
+1. **Шапка 44px:** `.mobile-menu-btn`, `.nav-auth-mobile__profile`, `.site-brand-mark`, `.nav-pill--mobile-login` — `min 44×44` + padding (`cabinet-app-shell.css`). Слот логотипа header **44px**. Перебивает прежний `nav-icon-btn { 32px !important }`.
+2. **Drawer:** CMS-чипы с теми же URL, что модули (Гранты / Добро / Самоуправление / Документы / О нас…), **не рендерятся** — остаётся один набор чипов.
+3. **Honeypot `website`:** класс `.yp-honeypot` (clip / left:-9999 / `tabIndex={-1}` / `pointer-events:none` / `readOnly`). Кнопка обновления капчи 44×44.
+4. **Cookie и футер:** `.yp-onboard-btn` min-height 44; юридические ссылки + `::after` расширяют hit-area.
+5. **PostHog** (когда MCP залогинен): heatmap `url_exact` = `https://ty.idivles.ru/`, `type: rageclick` и `click`, `viewport_width_max=480` (и отдельно 375–430), `aggregation: unique_visitors`. Смотреть кластеры у шапки (меню / вход / лого). Saved heatmap — после auth `heatmaps-list`.
+
+Прод `/opt/sochi-portal` не меняли.
