@@ -15,7 +15,7 @@
 
 | Проверка | PROD `py` | TEST `ty` | Комментарий |
 |---|---|---|---|
-| Вход email/пароль | PARTIAL | PARTIAL | Провайдер `credentials` есть. Живой успешный логин не выполнялся (нет тестовых учёток в задаче). |
+| Вход email/пароль | не гонялся (бой) | PASS | На `ty` успешный `POST /api/auth/callback/credentials` после captcha. Хеши QA на стейдже выровнены скриптом `reset-staging-qa-passwords.mjs` (только TEST). |
 | Яндекс / VK / Telegram | FAIL (Яндекс, VK) / PASS (Telegram) | PASS Яндекс+Telegram / FAIL VK | `GET /api/auth/providers`: на **py** только `telegram` + `credentials`. На **ty** `yandex` + `telegram` + `credentials`. **VK нет ни на одном контуре.** |
 | Неверный пароль, без утечки БД | PASS | PASS | `POST /api/auth/callback/credentials` → **401**, JSON с человекочитаемым текстом (лимит попыток / ошибка входа), без SQL/stacktrace. |
 | Истечение сессии | не проверено | не проверено | Нужна живая сессия и ожидание TTL. |
@@ -29,7 +29,7 @@
 | Редактирование профиля / приватность / QR / М-баллы | не проверено | Нужна авторизованная сессия. |
 | Бронь прошлого / пересечений / фильтры / уведомления | PARTIAL | Анонимный `POST /api/bookings` → **403** `CSRF_ORIGIN` (защита есть). Логика дат/пересечений не гонялась от имени пользователя. |
 | CRUD / пагинация админки | не проверено | `/admin` без сессии редиректит на логин. |
-| RBAC обычный пользователь на `/admin` | PARTIAL | Неавторизованный **не** попадает в админку (307 → login). Проверка «залогиненный user ≠ admin → 403» без учётки не сделана. `GET /api/admin/users` → **401**. |
+| RBAC обычный пользователь на `/admin` | PASS (`ty`) | `USER` / `PARTICIPANT` с сессией при заходе на `/admin` **редиректятся на `/dashboard`**, не остаются в админке. |
 
 ---
 
@@ -105,6 +105,29 @@
 3. **P3** На PROD нет рабочего `/opengraph-image` (404); превью соцсетей через иконку 512.
 4. **P3** Title `/login` не уникален; gzip_types/brotli для CSS/JS не дожаты.
 5. **P3** Диск 89% — следить за местом.
-6. Пункты кабинета, броней «от пользователя», визуальный адаптив и LCP/CLS — **остаются на ручной QA** с тестовой учёткой в браузере.
+6. Визуальный адаптив, LCP/CLS, CRUD броней/профиля, logout в UI — ещё на ручной прогон в браузере.
+7. TECH при прямом заходе на `/scanner` получает сканер (не только `/ops`) — уточнить, задумано ли это.
 
 Изоляция контуров (п. 5.1 чеклиста) подтверждена: тесты на `ty` не должны ломать пользователей `py` по процессам, портам и БД.
+
+---
+
+## 7. Ролевой прогон на TEST (`ty.idivles.ru`)
+
+Вход: captcha «выберите картинки» + email/пароль QA. Сессия: `GET /api/auth/session`.
+
+| Учётка | role в сессии | Куда пускает | Ожидание | Статус |
+|---|---|---|---|---|
+| `qa-admin@sochi.ru` | `ADMIN`, `isSuperAdmin: true` | `/admin`, `/admin/users`, `/dashboard`, `/scanner` остаются своими URL. `/ops` → **главная**, не ops. | Полная админка `/admin` | PASS (ops для TECH — верно, что admin не в /ops) |
+| `mod@sochi.ru` | `MODERATOR` | `/admin` OK. `/admin/users` → `/admin?denied=1`. `/scanner` → `/admin`. `/ops` → главная. `/dashboard` OK | Контент/заявки, не полная админка | PASS |
+| `part@sochi.ru` | `PARTICIPANT` | `/admin`, `/scanner`, `/ops` не держат: admin/scanner → **dashboard**, ops → главная | `/dashboard` | PASS |
+| `user@sochi.ru` | `USER`, ecoPoints **120** | То же: админка недоступна, кабинет `/dashboard` | `/dashboard` | PASS |
+| `scanner@sochi.ru` | `SCANNER` | `/scanner`, `/scan` → `/scanner?tab=pass`. `/admin` и `/dashboard` → **`/scanner`** | `/scanner` / `/scan` | PASS |
+| `private@sochi.ru` | `USER`, ecoPoints **55** | Как обычный USER → `/dashboard` | кабинет | PASS (отличие баллов от `user@`; скрытие контактов в UI не разбиралось полем в БД) |
+| `tech@sochi.ru` | `TECH` | Логин с `callbackUrl=/ops` → `{"url":".../ops"}`. `/admin`, `/dashboard` → **`/ops`**. Title страницы «Ops». `/scanner` при прямом URL открывается | `/ops`, не `/admin` | PASS по /ops и отсечению admin. **Замечание:** прямой `/scanner` для TECH тоже открывается |
+
+Скрытие TECH в списке пользователей: в коде `/opt/sochi-portal-staging/src/app/admin/users/page.tsx` фильтр `role: { not: 'TECH' }` и пропуск `g.role === 'TECH'`. Карточка `/admin/users/[id]` для TECH не показывается.
+
+Captcha обязательна: без токена — «Пройдите проверку „я не робот“». Неверный пароль при валидной captcha — «Неверные данные», без SQL.
+
+**Не делалось в этом прогоне:** смена ФИО/аватара, QR, брони, визуальный адаптив, logout кнопкой, полный CRUD модератора.
