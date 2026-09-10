@@ -5,9 +5,9 @@
 Запуск: `bash /opt/cursor-agent/scripts/audit-youngportal.sh both`  
 Отчёт: `/tmp/yp-audit-*/report.md`, `summary.json`, `scores.json`
 
-## Прогон 2026-09-10
+## Прогон 2026-09-10 (вечер, повтор)
 
-**Overall: 85 / 100** (strong)
+**Overall: 84 / 100** — см. детальный разбор изъянов в [`FULL_SITE_AUDIT.md`](./FULL_SITE_AUDIT.md).
 
 | Измерение | Балл |
 |-----------|------|
@@ -15,12 +15,12 @@
 | Security headers | 100 |
 | UX shell | 90 |
 | Auth/SSO | 67 |
-| Ops capacity | 60 |
+| Ops capacity | **28** |
 
 ### Честно
 
-**Сильно:** ty/py живые и быстрые; все публичные маршруты 200; кабинет редиректит на login; HSTS/CSP; контейнеры healthy; на ty Яндекс SSO живой.
+**Сильно:** ty/py живые; публичные маршруты 200; HSTS/CSP; контейнеры healthy; на ty Яндекс SSO живой; brand `hdr22`.
 
-**Слабо:** на py нет OAuth (образ без SSO из DB); VK/Telegram не настроены; диск 84%; RAM ~0.6GB free — риск OOM/502 при rebuild.
+**Слабо:** диск **88%**, RAM ~250MB avail; py без OAuth; hero mobile в src есть, в Docker-образе нет; `/cookies` 404; `/profile` на py 404 (на ty → settings); Next static→dynamic на privacy/terms.
 
-**Не покрыто скриптом (вручную):** визуал главной/солнце, клики Назад в edit, UX капчи, реальный login паролем, мобильный dock.
+**Не покрыто скриптом (вручную):** Accept cookie, клики Назад в edit, капча, реальный login, dock Чаты.
