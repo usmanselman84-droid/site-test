@@ -9,3 +9,5 @@
 - Аудиты и фиксы по умолчанию: `ty` only.
 
 VPS marker: `/opt/cursor-agent/WORK_SCOPE.txt`
+
+Визуал/CSS: см. `AGENT_FAST_PATH.md` — live `/brand/`, без Docker rebuild.

@@ -5,7 +5,8 @@
 `/opt/cursor-agent/`
 
 - `logs/journal.log` и `logs/YYYY-MM-DD.md`
-- `scripts/` (`agent-log.sh`, `check-isolation.sh`)
+- `FAST_PATH.md` — CSS/visual без Docker rebuild
+- `scripts/` (`agent-log.sh`, `brand-bump.sh`, `check-isolation.sh`)
 - `notes/` (фичи стейджа, как писать лог)
 
 Новая запись:
