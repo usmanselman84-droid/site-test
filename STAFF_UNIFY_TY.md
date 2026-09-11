@@ -1,6 +1,10 @@
 # ty: кабинет, панель, модерация — единый каркас
 
-Только `/opt/sochi-portal-staging`. **py не копировали.** CSS: `theme.css?v=hdr39`. Шапка и нижнее меню снова принудительно видны (hdr37 случайно сжимал отступы кабинета).
+Только `/opt/sochi-portal-staging`. **py не копировали.** CSS: `theme.css?v=hdr40`, `header-boot.js?v=21`.
+
+Шапка и док на `/dashboard` пропадали не из-за `display:none` в theme.css: `HideOnPaths` **вырезает Navbar/BottomNav из DOM** на `/dashboard` и `/profile`. hdr38/hdr39 не могли показать то, чего нет. Fast-path: `header-boot` вставляет `.yp-cab-chrome` (glass-nav + yp-bottom-nav), снимает ложный `is-admin` с кабинета, CSS бьёт `html.is-admin .glass-nav { display:none }` из Next. Сообщения и profile-edit без этой вставки.
+
+Мобильный кабинет: хаб-чипы без ellipsis; дубль «Мои записи / Общение» (`.cabinet-hub-tabs__nav`) скрыт — остаётся `.cabinet-rail-strip`.
 
 ## Как разложено
 - Кабинет: боковое меню показывает все четыре блока сразу (страница / общение / дела / прогресс), без гармошки. «Мои записи» — календарь, хаб «Моя страница» открывает `/dashboard/me`.
