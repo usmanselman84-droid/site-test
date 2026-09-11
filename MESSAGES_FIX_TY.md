@@ -21,3 +21,9 @@ Rebuild staging для TSX; CSS/boot уже на nginx. **py не копиров
 - Фиолетовый акцент в `messages.css` vs бренд лайм.
 - Список чатов + тред desktop split на узких ширинах.
 - Уведомления / read-receipts отдельно от layout.
+
+
+## Добивка после аудита (hdr44 / boot v6)
+- MutationObserver больше **не** force-pin при каждом paint — скролл вверх снова живой; pin только при открытии треда или новом пузыре у низа.
+- `setQuery` → `/dashboard/messages?...` (без редирект-ремаунта через `/messages`).
+- Desktop inbox: 2 колонки сохранены; док скрыт только в `is-thread`.
