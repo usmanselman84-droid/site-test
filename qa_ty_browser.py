@@ -56,8 +56,8 @@ AUDIT_JS = r"""
       }
     }
     // interactive elements smaller than 40px
-    if ((el.tagName === 'A' || el.tagName === 'BUTTON') && (r.height < 32 || r.width < 32) && el.innerText.trim()) {
-      out.tinyTap.push({ text: el.innerText.trim().slice(0, 24), w: Math.round(r.width), h: Math.round(r.height) });
+    if ((el.tagName === 'A' || el.tagName === 'BUTTON') && (r.height < 32 || r.width < 32) && (el.innerText || '').trim()) {
+        out.tinyTap.push({ text: (el.innerText || '').trim().slice(0, 24), w: Math.round(r.width), h: Math.round(r.height) });
     }
     // visually empty containers taking vertical space
     if (r.height > 120 && el.children.length === 0 && !el.innerText.trim() && el.tagName !== 'IMG' && el.tagName !== 'SVG'
