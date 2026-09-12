@@ -28,15 +28,16 @@
 - Карточки/табы: `var(--radius-md)` (не mix 10px / 999 / 50%)  
 - Отступы: `gap` 0.75–1rem, без «карточка слева + пустота справа»
 
-## P0 на ty (этот проход)
-1. `--primary` → море; убрать purple admin/sidebar accents.  
-2. CSS unify: dashboard grid заполняет shell; кнопки/табы согласованы.  
-3. Messages: full-bleed в shell; mobile thread height + composer sticky; не перекрывать ввод.  
-4. CLS: `html.yp-booting` уже есть — закрепить min-height скелетонов кабинета.  
+## P0 на ty — сделано
+1. `--primary` → море `#0a7aa8` (globals + theme hdr48–50).  
+2. CSS unify: shell = главная; CTA pill; kill purple в nav/admin.  
+3. Messages: `dashboard-page--messages` без aside; mobile thread 100dvh + sticky composer; dock скрыт.  
+4. Staging rebuild healthy; QA: width PASS, messages write/scroll PASS; purple добито hdr50.
 
 ## P1
 - Split `messages/page.tsx` монолита.  
-- Unread в доке.  
-- Ускорение `/dashboard` data (меньше waterfall).  
+- Unread badge в доке «Чаты».  
+- Ускорение `/dashboard` data (меньше waterfall / CLS).  
+- Выровнять radius табов «Сейчас/История» с CTA (уже частично).
 
 py не трогать без «одобряю».
