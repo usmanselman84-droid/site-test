@@ -16,14 +16,31 @@
 
 Rebuild staging для TSX; CSS/boot уже на nginx. **py не копировали.**
 
-## Что ещё может остаться
-- Монолит page ~1.4k строк / тяжёлый poll.
-- Фиолетовый акцент в `messages.css` vs бренд лайм.
-- Список чатов + тред desktop split на узких ширинах.
-- Уведомления / read-receipts отдельно от layout.
-
-
 ## Добивка после аудита (hdr44 / boot v6)
 - MutationObserver больше **не** force-pin при каждом paint — скролл вверх снова живой; pin только при открытии треда или новом пузыре у низа.
 - `setQuery` → `/dashboard/messages?...` (без редирект-ремаунта через `/messages`).
 - Desktop inbox: 2 колонки сохранены; док скрыт только в `is-thread`.
+
+## Добивка hdr45 + soft poll (2026-09-12)
+- `theme.css?v=hdr45`: бренд лайм/море на send/accent; добивка hide dock-space в треде.
+- `messages.css`: `--msg-accent` море `#0a7aa8`, `--msg-mine` лайм `#afca03` (не фиолетовый).
+- Soft poll открытого треда: `setInterval(..., 12000)` + `soft: true` (без лоадеров/ремаунта); tick при `visibilitychange → visible`.
+- Rebuild staging `sochi-staging-web-1` — healthy; live: `theme.css?v=hdr45`, `messages-boot.js?v=6`.
+- VPS: перед rebuild prune builder; после — диск ~79% (был 100% на export).
+
+### QA (ty mobile ~390)
+| Проверка | Результат |
+|----------|-----------|
+| Inbox: док виден, rail скрыт, скролл | PASS |
+| Тред: композер виден, последнее над ним | PASS |
+| Тред: док не перекрывает ввод | PASS |
+| Скролл вверх по истории (не force-pin) | PASS |
+| Акценты лайм/море | PASS |
+
+Сиды для QA: DM `user@sochi.ru` ↔ `part@sochi.ru` (только staging).
+
+## Что ещё может остаться
+- Монолит page ~1.4k строк — split `ThreadList` / `ThreadView` / `Composer`.
+- Один владелец дока (React chrome вместо boot inject) — см. SITE_FULL_PLAN P0.3.
+- Desktop split на очень узких ширинах.
+- Уведомления / read-receipts отдельно от layout.
