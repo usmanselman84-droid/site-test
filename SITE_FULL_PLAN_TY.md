@@ -12,10 +12,10 @@
 |------|------|-----------|
 | Публичка | `/`, афиша, коворкинг, новости, галерея, вакансии, конкурсы | В основном 200; главная холодный TTFB ~2.5s |
 | Auth | login/register/SSO | Капча, Yandex на ty; py без Yandex (parity) |
-| Кабинет | `/dashboard/*` | Логика хабов ок; хром через boot-костыль; overview облегчён |
+| Кабинет | `/dashboard/*` | **хром React на ty** (`CabinetTopBar` + BottomNav); overview облегчён |
 | Сообщения | `/dashboard/messages` | **P0 UX закрыт на ty** (hdr45/boot6 + soft poll); split page — дальше |
 | Админка | `/admin/*` | Очереди сгруппированы; тяжёлые страницы |
-| Ops | диск/RAM/Docker | диск после prune ~79%; RAM ~1.9G — один rebuild за раз |
+| Ops | диск/RAM/Docker | диск ~79% после prune; RAM ~1.9G — один rebuild за раз |
 
 ---
 
