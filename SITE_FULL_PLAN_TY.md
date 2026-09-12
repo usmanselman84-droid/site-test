@@ -13,9 +13,9 @@
 | Публичка | `/`, афиша, коворкинг, новости, галерея, вакансии, конкурсы | В основном 200; главная холодный TTFB ~2.5s |
 | Auth | login/register/SSO | Капча, Yandex на ty; py без Yandex (parity) |
 | Кабинет | `/dashboard/*` | Логика хабов ок; хром через boot-костыль; overview облегчён |
-| Сообщения | `/dashboard/messages` | **P0 UX**: скролл / последние / композер |
+| Сообщения | `/dashboard/messages` | **P0 UX закрыт на ty** (hdr45/boot6 + soft poll); split page — дальше |
 | Админка | `/admin/*` | Очереди сгруппированы; тяжёлые страницы |
-| Ops | диск/RAM/Docker | **P0**: диск 91%, RAM ~1.9G |
+| Ops | диск/RAM/Docker | диск после prune ~79%; RAM ~1.9G — один rebuild за раз |
 
 ---
 
@@ -26,24 +26,14 @@
 - RAM **1.9G** → OOM/502 при параллельных rebuild.
 - **Задачи:** `docker builder prune`; ротация логов; не держать 2 rebuild сразу; перед build — `stop web` + prune; мониторинг `df`/`free`.
 
-### 2. Сообщения (диалоги)
-Симптомы: не видно последних, не листается, поле ввода «ломается».
+### 2. Сообщения (диалоги) — сделано на ty
+Симптомы закрыты: композер виден, последние над ним, скролл вверх живой, rail/док в треде не мешают.
 
-Корни (код):
-- Монолит `dashboard/messages/page.tsx` (~1436 строк) + `messages.css` (~2336).
-- API отдаёт `orderBy: createdAt desc`; клиент обязан разворачивать — при сбое порядка «низ» пустой/чужой.
-- Цепочка `body { overflow:hidden; 100dvh }` + `.messages-scroll { flex:1; overflow-y:auto }` ломается, если shell/док/cab-chrome съедают высоту → `scrollHeight`≈`clientHeight`, скролл мёртв.
-- Автоскролл только при `nearBottom < 120`; при битой высоте никогда не догоняет низ.
-- Конфликт хрома: `HideOnPaths` убирает Navbar/BottomNav на `/dashboard*`; `header-boot` + `messages-boot` вставляют свои доки → двойной padding / composer под доком / clipped.
+Сделано: `theme.css` hdr43–45, `messages-boot.js` v6, `CabinetShell` без strip на messages, pin on open/new, soft poll 12s, бренд лайм/море. QA mobile PASS (см. `MESSAGES_FIX_TY.md`).
 
-**Задачи (порядок):**
-1. CSS/boot (без rebuild): `--yp-bottom-nav-h` → `padding-bottom` композера; один док; `min-height:0` на всей flex-цепочке; убрать лишний `overflow:hidden` на родителях скролла.
-2. При открытии треда и после send — **всегда** `scrollTop = scrollHeight` (не только nearBottom).
-3. Явно `messages.slice().reverse()` (или API `asc`) + стабильный ключ.
-4. Разбить page на `ThreadList` / `ThreadView` / `Composer` / hooks; убрать лишний poll при скрытой вкладке.
-5. Бренд: убрать фиолетовый `--msg-accent` → лайм/море.
+Остаток (не P0): split монолита page; React-владелец дока вместе с п.3.
 
-### 3. Хром кабинета (системно)
+### 3. Хром кабинета (системно) — следующий P0
 `HideOnPaths` **размонтирует** Navbar/BottomNav на `/dashboard` и `/profile`. CSS не поможет. Сейчас `header-boot.js` вставляет `.yp-cab-chrome` — хрупко.
 
 **Задачи:**
