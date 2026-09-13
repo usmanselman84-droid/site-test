@@ -189,7 +189,11 @@ html .glass-nav-end .nav-auth-mobile__profile,
 html .nav-account-trigger.has-photo,
 html .nav-auth-mobile__profile.has-photo,
 html .site-header .nav-icon-btn,
-html .site-header .yp-notif-bell.is-nav-style {
+html .site-header .nav-icon-btn:hover,
+html .site-header .nav-icon-btn:focus,
+html .site-header .yp-notif-bell.is-nav-style,
+html .site-header .yp-notif-bell.is-nav-style:hover,
+html .site-header .yp-notif-bell.is-nav-style.is-open {
   width: 40px !important;
   min-width: 40px !important;
   max-width: 40px !important;
@@ -216,15 +220,21 @@ html .site-header .nav-profile-chip__mark,
 html .site-header .nav-account-trigger .user-avatar-wrap,
 html .site-header .nav-account-trigger .user-avatar-inner,
 html .site-header .nav-account-trigger .user-avatar-face,
-html .site-header .nav-account-trigger img {
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
+html .site-header .nav-account-trigger img,
+html .site-header .nav-account-trigger:hover .user-avatar-wrap,
+html .site-header .nav-account-trigger:hover .user-avatar-inner,
+html .site-header .nav-account-trigger:hover .user-avatar-face,
+html .site-header .nav-account-trigger:hover img {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
   object-fit: cover !important;
   object-position: center !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   display: block !important;
+  overflow: hidden !important;
+  transform: none !important;
 }
 
 /* Space between logo and menu */

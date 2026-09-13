@@ -100,7 +100,9 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
   const isScanner = userRole === 'SCANNER';
   const isTech = userRole === 'TECH';
   const isStaff = userRole === 'ADMIN' || userRole === 'MODERATOR';
-  const [sessionHint, setSessionHint] = useState(false);
+  const [sessionHint, setSessionHint] = useState(() =>
+    typeof window !== 'undefined' ? readSessionHint() : false
+  );
   const [publicCode, setPublicCode] = useState<string | null>(null);
   const [navAvatar, setNavAvatar] = useState<string | null>(null);
 
@@ -442,9 +444,11 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
         ) : null}
       </div>
       <div className="nav-auth-icons nav-auth-icons--compact nav-auth-authed">
-        {isAuthenticated && modOn(siteSettings, 'notifications') ? (
+        {modOn(siteSettings, 'notifications') ? (
           <NotificationsBell compact useNavStyle />
-        ) : null}
+        ) : (
+          <span className="nav-icon-btn" aria-hidden />
+        )}
         <div
           className={`nav-item nav-account${openMenu === 'account' ? ' is-open' : ''}`}
           data-nav-menu="account"
@@ -470,7 +474,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
             <UserAvatar
               name={(session?.user as { nickname?: string | null; name?: string | null } | undefined)?.nickname || session?.user?.name}
               image={navAvatar || session?.user?.image}
-              size={36}
+              size={40}
               framed={false}
             />
           </button>
