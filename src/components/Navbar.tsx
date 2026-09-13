@@ -710,6 +710,7 @@ export default function Navbar({
       [
         'самоуправление', 'добро', 'гранты', 'грант', 'о нас', 'документы', 'контакты',
         'проекты', 'клубы', 'пространства', 'афиша', 'новости', 'игры', 'галерея',
+        'уведомления',
       ].includes(title)
     ) {
       return false;
@@ -955,12 +956,13 @@ export default function Navbar({
         </div>
       </div>
 
-      {isMobileMenuOpen && (
-        <div
+      <div
           ref={mobileMenuRef}
-          className="mobile-menu"
+          className={`mobile-menu${isMobileMenuOpen ? ' is-open' : ''}`}
+          hidden={!isMobileMenuOpen}
           role="dialog"
-          aria-modal="true"
+          aria-modal={isMobileMenuOpen}
+          aria-hidden={!isMobileMenuOpen}
           aria-label="Меню"
         >
           <nav className="mobile-menu__nav">
@@ -1022,146 +1024,166 @@ export default function Navbar({
                   fallbackName={
                     (session!.user as { nickname?: string | null })?.nickname || session!.user?.name
                   }
-                  active={isMobileMenuOpen}
+                  image={navAvatar || (session!.user as { image?: string | null })?.image || null}
+                  active
                   onNavigate={closeMenu}
                   ctaLabel={isTech ? 'Открыть Ops' : isScanner ? 'Открыть сканер' : 'Открыть профиль'}
                 />
               )}
             </div>
 
-            {session && !isScanner && !isTech && (
-              <div className="mobile-menu__chips" aria-label="Кабинет">
-                <Link href="/dashboard/tickets" onClick={closeMenu} className="mobile-menu__chip">
-                  Билеты
-                </Link>
-                <Link href="/dashboard/guides" onClick={closeMenu} className="mobile-menu__chip">
-                  Инструктажи
-                </Link>
-                {modOn(siteSettings, 'achievements') ? (
-                  <Link href="/dashboard/achievements" onClick={closeMenu} className="mobile-menu__chip">
-                    Достижения
+            {session && !isScanner && !isTech ? (
+              <section className="yp-drawer-group">
+                <h3 className="yp-drawer-group__title">Кабинет</h3>
+                <div className="yp-drawer-pills">
+                  <Link href="/dashboard/tickets" onClick={closeMenu} className="yp-drawer-pill">
+                    Билеты
                   </Link>
-                ) : null}
-                {modOn(siteSettings, 'eco') ? (
-                  <Link href="/dashboard/shop" onClick={closeMenu} className="mobile-menu__chip">
-                    Магазин
+                  <Link href="/dashboard/guides" onClick={closeMenu} className="yp-drawer-pill">
+                    Инструктажи
                   </Link>
-                ) : null}
-                {isStaff ? (
-                  <Link href="/admin" onClick={closeMenu} className="mobile-menu__chip">
-                    Панель
+                  {modOn(siteSettings, 'achievements') ? (
+                    <Link href="/dashboard/achievements" onClick={closeMenu} className="yp-drawer-pill">
+                      Достижения
+                    </Link>
+                  ) : null}
+                  {modOn(siteSettings, 'eco') ? (
+                    <Link href="/dashboard/shop" onClick={closeMenu} className="yp-drawer-pill">
+                      Магазин
+                    </Link>
+                  ) : null}
+                  {isStaff ? (
+                    <Link href="/admin" onClick={closeMenu} className="yp-drawer-pill">
+                      Панель
+                    </Link>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
+            {session && (isScanner || isTech) ? (
+              <section className="yp-drawer-group">
+                <h3 className="yp-drawer-group__title">Рабочее место</h3>
+                <div className="yp-drawer-pills">
+                  <Link href={dashboardHref} onClick={closeMenu} className="yp-drawer-pill">
+                    {cabinetLabel}
                   </Link>
-                ) : null}
-              </div>
-            )}
-            {session && (isScanner || isTech) && (
-              <div className="mobile-menu__chips" aria-label="Рабочее место">
-                <Link href={dashboardHref} onClick={closeMenu} className="mobile-menu__chip">
-                  {cabinetLabel}
-                </Link>
-              </div>
-            )}
+                </div>
+              </section>
+            ) : null}
 
-            <div className="mobile-menu__section-label">Разделы</div>
-            <div className="mobile-menu__chips mobile-menu__chips--sections" aria-label="Разделы сайта">
-              {headerMainPages.filter(showCmsInDrawer).map((page: any) => (
-                <Link
-                  key={page.id}
-                  href={publicPagePath(page.slug || "")}
-                  onClick={closeMenu}
-                  className="mobile-menu__chip"
-                  style={getLinkStyle(publicPagePath(page.slug || ""))}
-                >
-                  {page.title}
+            <section className="yp-drawer-group">
+              <h3 className="yp-drawer-group__title">Смотреть</h3>
+              <div className="yp-drawer-pills">
+                {modOn(siteSettings, 'events') ? (
+                  <Link href="/events" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/events')}>
+                    Афиша
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'places') ? (
+                  <Link href="/places" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/places')}>
+                    Куда сходить
+                  </Link>
+                ) : null}
+                {(siteSettings?.galleryPageEnabled ?? true) && modOn(siteSettings, 'gallery') ? (
+                  <Link href="/gallery" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/gallery')}>
+                    Галерея
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'news') ? (
+                  <Link href="/news" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/news')}>
+                    Новости
+                  </Link>
+                ) : null}
+              </div>
+            </section>
+
+            <section className="yp-drawer-group">
+              <h3 className="yp-drawer-group__title">Участвовать</h3>
+              <div className="yp-drawer-pills">
+                {modOn(siteSettings, 'projects') ? (
+                  <Link href="/projects" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/projects')}>
+                    Проекты
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'clubs') ? (
+                  <Link href="/clubs" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/clubs')}>
+                    Клубы
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'spaces') ? (
+                  <Link href="/spaces" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/spaces')}>
+                    Пространства ЦРМ
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'dobro') ? (
+                  <Link href="/dobro" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/dobro')}>
+                    Добро
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'contests') ? (
+                  <Link href="/contests" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/contests')}>
+                    Конкурсы
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'grants') ? (
+                  <Link href="/grants" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/grants')}>
+                    Гранты
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'vacancies') ? (
+                  <Link href="/vacancies" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/vacancies')}>
+                    Вакансии
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'self_gov') ? (
+                  <Link href="/self-gov" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/self-gov')}>
+                    Самоуправление
+                  </Link>
+                ) : null}
+                {modOn(siteSettings, 'games') ? (
+                  <Link href="/games" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/games')}>
+                    Игры
+                  </Link>
+                ) : null}
+              </div>
+            </section>
+
+            <section className="yp-drawer-group">
+              <h3 className="yp-drawer-group__title">Ещё</h3>
+              <div className="yp-drawer-pills">
+                {headerMainPages.filter(showCmsInDrawer).map((page: any) => (
+                  <Link
+                    key={page.id}
+                    href={publicPagePath(page.slug || '')}
+                    onClick={closeMenu}
+                    className="yp-drawer-pill"
+                    style={getLinkStyle(publicPagePath(page.slug || ''))}
+                  >
+                    {page.title}
+                  </Link>
+                ))}
+                {modOn(siteSettings, 'documents') ? (
+                  <Link href="/documents" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/documents')}>
+                    Документы
+                  </Link>
+                ) : null}
+                <Link href="/contacts" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/contacts')}>
+                  Контакты
                 </Link>
-              ))}
-              {modOn(siteSettings, 'projects') ? (
-                <Link href="/projects" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/projects')}>
-                  Проекты
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'clubs') ? (
-                <Link href="/clubs" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/clubs')}>
-                  Клубы
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'spaces') ? (
-                <Link href="/spaces" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/spaces')}>
-                  Пространства ЦРМ
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'places') ? (
-                <Link href="/places" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/places')}>
-                  Куда сходить
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'events') ? (
-                <Link href="/events" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/events')}>
-                  Афиша
-                </Link>
-              ) : null}
-              {(siteSettings?.galleryPageEnabled ?? true) && modOn(siteSettings, 'gallery') ? (
-                <Link href="/gallery" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/gallery')}>
-                  Галерея
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'news') ? (
-                <Link href="/news" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/news')}>
-                  Новости
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'vacancies') ? (
-                <Link href="/vacancies" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/vacancies')}>
-                  Вакансии
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'contests') ? (
-                <Link href="/contests" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/contests')}>
-                  Конкурсы
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'grants') ? (
-                <Link href="/grants" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/grants')}>
-                  Гранты
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'dobro') ? (
-                <Link href="/dobro" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/dobro')}>
-                  Добро
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'self_gov') ? (
-                <Link href="/self-gov" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/self-gov')}>
-                  Самоуправление
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'documents') ? (
-                <Link href="/documents" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/documents')}>
-                  Документы
-                </Link>
-              ) : null}
-              {modOn(siteSettings, 'games') ? (
-                <Link href="/games" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/games')}>
-                  Игры
-                </Link>
-              ) : null}
-              <Link href="/contacts" onClick={closeMenu} className="mobile-menu__chip" style={getLinkStyle('/contacts')}>
-                Контакты
-              </Link>
-              {headerSubPages.filter(showCmsInDrawer).map((page: any) => (
-                <Link
-                  key={page.id}
-                  href={publicPagePath(page.slug || "")}
-                  onClick={closeMenu}
-                  className="mobile-menu__chip"
-                >
-                  {publicCmsTitle(page.slug, page.title)}
-                </Link>
-              ))}
-            </div>
+                {headerSubPages.filter(showCmsInDrawer).map((page: any) => (
+                  <Link
+                    key={page.id}
+                    href={publicPagePath(page.slug || '')}
+                    onClick={closeMenu}
+                    className="yp-drawer-pill"
+                  >
+                    {publicCmsTitle(page.slug, page.title)}
+                  </Link>
+                ))}
+              </div>
+            </section>
           </nav>
         </div>
-      )}
     </header>
   );
 }

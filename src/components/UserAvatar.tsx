@@ -178,6 +178,7 @@ export default function UserAvatar({
         width={size}
         height={size}
         className="user-avatar-face"
+        decoding="async"
         style={shared}
         onError={() => setImgFailed(true)}
       />

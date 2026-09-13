@@ -30,6 +30,7 @@ type Props = {
   variant?: 'default' | 'sheet';
   ctaLabel?: string;
   showRatings?: boolean;
+  image?: string | null;
 };
 
 export default function NavProfileCard({
@@ -40,20 +41,33 @@ export default function NavProfileCard({
   variant = 'default',
   ctaLabel,
   showRatings,
+  image,
 }: Props) {
-  const [profile, setProfile] = useState<ProfileLite | null>(null);
+  const [profile, setProfile] = useState<ProfileLite | null>(
+    image || fallbackName ? { image: image || null, name: fallbackName } : null
+  );
   const [items, setItems] = useState<RatingItem[]>([]);
   const [loading, setLoading] = useState(false);
   const isSheet = variant === 'sheet';
   const ratingsOn = showRatings ?? !isSheet;
   const cta = ctaLabel ?? (isSheet ? 'Открыть профиль' : null);
 
+  useEffect(() => {
+    if (!image) return;
+    setProfile((prev) => ({ ...(prev || {}), image, name: prev?.name || fallbackName }));
+  }, [image, fallbackName]);
+
   const load = useCallback(async () => {
-    setLoading(true);
     try {
       const [p, e] = await Promise.all([fetchProfileCached(), fetchEcoCached()]);
 
-      if (p?.id) setProfile(p as ProfileLite);
+      if (p?.id) {
+        setProfile((prev) => ({
+          ...(prev || {}),
+          ...(p as ProfileLite),
+          image: (p as ProfileLite).image || prev?.image || image || null,
+        }));
+      }
 
       const level = (e as any)?.level?.level;
       const ecoPoints =
@@ -75,10 +89,8 @@ export default function NavProfileCard({
       );
     } catch {
       /* keep previous */
-    } finally {
-      setLoading(false);
     }
-  }, []);
+  }, [image]);
 
   useEffect(() => {
     if (!active) return;
@@ -116,10 +128,10 @@ export default function NavProfileCard({
   return (
     <div className={`nav-profile-card${isSheet ? ' nav-profile-card--sheet' : ''}${loading ? ' is-loading' : ''}`}>
       <Link href={href} onClick={onNavigate} className="nav-profile-card__main">
-        <span className="nav-profile-card__avatar" aria-hidden>
+        <span className="nav-profile-card__avatar yp-drawer-avatar" aria-hidden>
           <UserAvatar
             name={displayName}
-            image={profile?.image}
+            image={profile?.image || image}
             size={40}
             framed={false}
           />

@@ -344,17 +344,21 @@ button.home-card-cta {
   }
 }
 
-/* Hero: full remaining viewport, no glow/shadow halo */
+/* Hero: fill from header to dock (or screen bottom for guests).
+   Do not also subtract safe-area-top — the sticky header already includes it. */
 :root {
   --yp-dock-h: calc(4.15rem + env(safe-area-inset-bottom, 0px));
-  --yp-hero-h: calc(100svh - var(--nav-h, 3.75rem) - env(safe-area-inset-top, 0px));
+  --yp-hero-h: calc(100dvh - var(--nav-h, 3.5rem));
 }
 @media (max-width: 860px) {
+  :root {
+    --yp-hero-h: calc(100dvh - var(--nav-h, 3.5rem)) !important;
+  }
   html.has-session,
   html.has-bottom-nav,
   body.has-bottom-nav {
     --yp-bottom-nav-h: var(--yp-dock-h);
-    --yp-hero-h: calc(100svh - var(--nav-h, 3.75rem) - env(safe-area-inset-top, 0px) - var(--yp-bottom-nav-h));
+    --yp-hero-h: calc(100dvh - var(--nav-h, 3.5rem) - var(--yp-dock-h)) !important;
   }
 }
 
@@ -374,6 +378,15 @@ button.home-card-cta {
   min-height: var(--yp-hero-h) !important;
   height: var(--yp-hero-h) !important;
   max-height: var(--yp-hero-h) !important;
+}
+.home-page--lift .lift-hero .svc-hero__img,
+.home-page--lift .lift-hero .svc-hero__video,
+.lift-hero .svc-hero__media img,
+.lift-hero .svc-hero__media video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
 }
 
 .lift-hero__glow,
