@@ -50,6 +50,7 @@ html {
 .dashboard-layout.dashboard-shell,
 html body .dashboard-layout,
 html body .dashboard-layout.dashboard-shell {
+  display: grid !important;
   max-width: none !important;
   width: 100% !important;
   margin-left: 0 !important;
@@ -97,6 +98,19 @@ html body .dashboard-layout.dashboard-shell > .dashboard-aside {
 .dashboard-content-card {
   padding: 1.25rem 1.5rem !important;
   border-radius: var(--yp-radius-card) !important;
+}
+
+.cabinet-desk,
+.cabinet-desk--modern,
+.cabinet-desk.cabinet-desk--modern,
+.dashboard-page .cabinet-desk,
+.pe-stack,
+.profile-settings-hub,
+.dashboard-main > * {
+  max-width: none !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 /* ---- Контролы: один размер ---- */
