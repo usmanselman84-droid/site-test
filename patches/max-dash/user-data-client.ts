@@ -95,7 +95,7 @@ const apiCache = new Map<string, { at: number; data: unknown }>();
 const apiInflight = new Map<string, Promise<unknown>>();
 
 /** Short-lived in-memory cache for cabinet lists (messages / friends). */
-export async function fetchUserApiCached(url: string, ttlMs = 12_000, force = false): Promise<unknown> {
+export async function fetchUserApiCached(url: string, ttlMs = 12_000, force = false): Promise<any> {
   const now = Date.now();
   const hit = apiCache.get(url);
   if (!force && hit && now - hit.at < ttlMs) return hit.data;
