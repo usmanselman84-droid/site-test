@@ -483,27 +483,75 @@ html.has-session .nav-auth-authed {
   }
   .mobile-menu__chip,
   .mobile-menu a.mobile-menu__chip {
-    min-height: 2.75rem !important;
-    border-radius: 12px !important;
-    padding: 0 0.9rem !important;
+    min-height: 2.35rem !important;
+    border-radius: 999px !important;
+    padding: 0 0.75rem !important;
+  }
+  .mobile-menu__chips--sections {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.35rem !important;
+    padding: 0 0.85rem 1.1rem !important;
+  }
+  .mobile-menu__chips--sections .mobile-menu__chip {
+    width: auto !important;
+    flex: 0 0 auto !important;
+    min-height: 2.15rem !important;
+    padding: 0.3rem 0.7rem !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    justify-content: center !important;
+    background: #fff !important;
+  }
+  .mobile-menu__chips:not(.mobile-menu__chips--sections) {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.35rem !important;
+  }
+  .mobile-menu__section-label {
+    padding: 0.45rem 1rem 0.25rem !important;
   }
 }
 
 /* Avatars: rounded square, not a squeezed circle */
 .profile-hero__avatar,
 .profile-hero__avatar-inner,
-.profile-hero__avatar img,
-.mobile-menu .user-avatar-wrap,
-.mobile-menu .user-avatar-inner,
-.mobile-menu .user-avatar-face,
-.nav-profile-chip img,
-.mobile-menu__auth img {
+.profile-hero__avatar img {
   border-radius: 12px !important;
   overflow: hidden !important;
 }
 .profile-hero__avatar {
   width: 4.5rem !important;
   height: 4.5rem !important;
+}
+
+.nav-profile-card__avatar,
+.nav-profile-card--sheet .nav-profile-card__avatar {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
+  flex: 0 0 40px !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  border: 1.5px solid #afca03 !important;
+  background: #fff !important;
+}
+.nav-profile-card__avatar img,
+.nav-profile-card__avatar .user-avatar-wrap,
+.nav-profile-card__avatar .user-avatar-inner,
+.nav-profile-card__avatar .user-avatar-face,
+.mobile-menu__auth img {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 10px !important;
+  transform: none !important;
+  animation: none !important;
 }
 
 /* QR fullscreen close always on top */

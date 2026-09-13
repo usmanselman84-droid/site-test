@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
-import { ChevronRight, UserCircle } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import UserAvatar from '@/components/UserAvatar';
 import { RatingProgressChips, buildRatingItems, type RatingItem } from '@/components/RatingProgressIcons';
 
 import { profileDisplayName, shouldShowLegalSub } from '@/lib/profile-display';
@@ -116,12 +117,12 @@ export default function NavProfileCard({
     <div className={`nav-profile-card${isSheet ? ' nav-profile-card--sheet' : ''}${loading ? ' is-loading' : ''}`}>
       <Link href={href} onClick={onNavigate} className="nav-profile-card__main">
         <span className="nav-profile-card__avatar" aria-hidden>
-          {profile?.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={profile.image} alt="" />
-          ) : (
-            <UserCircle size={isSheet ? 32 : 28} strokeWidth={1.75} />
-          )}
+          <UserAvatar
+            name={displayName}
+            image={profile?.image}
+            size={40}
+            framed={false}
+          />
         </span>
         <span className="nav-profile-card__text">
           <span className="nav-profile-card__name">{displayName}</span>

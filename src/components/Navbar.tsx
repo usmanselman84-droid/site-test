@@ -1031,9 +1031,6 @@ export default function Navbar({
 
             {session && !isScanner && !isTech && (
               <div className="mobile-menu__chips" aria-label="Кабинет">
-                <Link href="/dashboard/notifications" onClick={closeMenu} className="mobile-menu__chip">
-                  Уведомления
-                </Link>
                 <Link href="/dashboard/tickets" onClick={closeMenu} className="mobile-menu__chip">
                   Билеты
                 </Link>
