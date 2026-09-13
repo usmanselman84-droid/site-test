@@ -1,6 +1,8 @@
+import { cookies } from 'next/headers';
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import Navbar from './Navbar';
+import { SESSION_HINT_KEY } from '@/lib/session-hint';
 import { publishedWhere } from '@/lib/publish';
 import { pickNavCatalog } from '@/lib/nav-catalog';
 import { isNextBuildPhase } from '@/lib/build-phase';
@@ -81,6 +83,7 @@ const getNavbarData = unstable_cache(
 
 export default async function NavbarWrapper() {
   const { spaces, clubs, projects, pages, siteSettings } = await getNavbarData();
+  const hinted = (await cookies()).get(SESSION_HINT_KEY)?.value === '1';
 
   return (
     <Navbar
@@ -89,6 +92,7 @@ export default async function NavbarWrapper() {
       projects={projects}
       pages={pages}
       siteSettings={siteSettings}
+      initialSessionHint={hinted}
     />
   );
 }

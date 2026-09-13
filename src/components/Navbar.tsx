@@ -80,7 +80,14 @@ function Link({ prefetch = false, ...props }: ComponentProps<typeof NextLink>) {
   return <NextLink prefetch={prefetch} {...props} />;
 }
 
-export default function Navbar({ spaces = [], clubs = [], projects = [], pages = [], siteSettings }: any) {
+export default function Navbar({
+  spaces = [],
+  clubs = [],
+  projects = [],
+  pages = [],
+  siteSettings,
+  initialSessionHint = false,
+}: any) {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -100,9 +107,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
   const isScanner = userRole === 'SCANNER';
   const isTech = userRole === 'TECH';
   const isStaff = userRole === 'ADMIN' || userRole === 'MODERATOR';
-  const [sessionHint, setSessionHint] = useState(() =>
-    typeof window !== 'undefined' ? readSessionHint() : false
-  );
+  const [sessionHint, setSessionHint] = useState(() => Boolean(initialSessionHint));
   const [publicCode, setPublicCode] = useState<string | null>(null);
   const [navAvatar, setNavAvatar] = useState<string | null>(null);
 
@@ -423,6 +428,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
       className="nav-auth-slot"
       style={{ ['--nav-auth-slots' as string]: authIconCount }}
     >
+      {showAuthedNav ? null : (
       <div className="nav-auth-icons nav-auth-guest">
         {onBookingFlow ? null : (
         <GuestAuthPrompt
@@ -443,6 +449,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
           </Link>
         ) : null}
       </div>
+      )}
       <div className="nav-auth-icons nav-auth-icons--compact nav-auth-authed">
         {modOn(siteSettings, 'notifications') ? (
           <NotificationsBell compact useNavStyle />
