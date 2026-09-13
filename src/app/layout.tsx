@@ -10,6 +10,7 @@ import './eco-cosmetics.css';
 import './scroll-perf.css';
 import './ux-batch.css';
 import './catalog-ui-fix.css';
+import './design-unify.css';
 import NavbarWrapper from '@/components/NavbarWrapper';
 import BottomNav from '@/components/BottomNav';
 import Footer from '@/components/Footer';

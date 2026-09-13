@@ -1,0 +1,331 @@
+/* Единая шкала: контролы 40×40, радиус 10, лайм #AFCA03, кабинеты на всю ширину */
+
+:root {
+  --yp-control: 40px;
+  --yp-control-sm: 36px;
+  --yp-radius-control: 10px;
+  --yp-radius-card: 1rem;
+  --yp-lime: #afca03;
+  --yp-lime-hover: #9ab502;
+  --yp-shell: min(90rem, calc(100vw - 2.5rem));
+  --yp-type-xs: 0.75rem;
+  --yp-type-sm: 0.875rem;
+  --yp-type-md: 1rem;
+  --yp-space: 1.25rem;
+}
+
+html {
+  font-size: 16px;
+}
+
+/* ---- Публичная оболочка ---- */
+.public-shell-inner,
+.home-inner,
+.catalog-page,
+.home-sections,
+.home-sections.container,
+.container:not(.glass-nav-inner):not(.dashboard-page) {
+  max-width: var(--yp-shell) !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-hero-copy {
+  max-width: 42rem;
+}
+
+.main-content > .container,
+.site-footer > .container {
+  max-width: var(--yp-shell) !important;
+}
+
+/* ---- Кабинет и ops: на всю ширину, без «дыры» справа ---- */
+.dashboard-page.container,
+.dashboard-page,
+.main-content > .dashboard-page.container {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+.dashboard-layout.dashboard-shell,
+html body .dashboard-layout,
+html body .dashboard-layout.dashboard-shell {
+  max-width: none !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: clamp(1rem, 2vw, 1.75rem) !important;
+  box-sizing: border-box;
+  grid-template-columns: 15rem minmax(0, 1fr) !important;
+  align-items: start;
+}
+
+html body .dashboard-aside--nav,
+html body .dashboard-layout.dashboard-shell > .dashboard-aside {
+  width: 15rem !important;
+  min-width: 15rem !important;
+  max-width: 15rem !important;
+}
+
+.admin-layout-wrapper {
+  width: 100% !important;
+  max-width: none !important;
+  --admin-sidebar-w: 15rem;
+}
+
+.dashboard-content,
+.dashboard-content-card,
+.dashboard-main,
+.admin-main,
+.admin-content,
+.admin-page-shell,
+.admin-dash {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+.admin-dash__now {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.admin-dash__block,
+.admin-dash__charts {
+  width: 100%;
+}
+
+.dashboard-content-card {
+  padding: 1.25rem 1.5rem !important;
+  border-radius: var(--yp-radius-card) !important;
+}
+
+/* ---- Контролы: один размер ---- */
+.public-icon-btn,
+.public-search-toggle,
+.public-notify-btn,
+.public-profile-avatar,
+.public-profile-trigger,
+.header-profile-avatar,
+button.public-icon-btn,
+a.public-icon-btn {
+  width: var(--yp-control) !important;
+  height: var(--yp-control) !important;
+  min-width: var(--yp-control) !important;
+  min-height: var(--yp-control) !important;
+  max-width: var(--yp-control) !important;
+  max-height: var(--yp-control) !important;
+  padding: 0 !important;
+  border-radius: var(--yp-radius-control) !important;
+  box-sizing: border-box !important;
+}
+
+.public-search-field {
+  height: var(--yp-control) !important;
+  min-height: var(--yp-control) !important;
+  border-radius: var(--yp-radius-control) !important;
+}
+
+.public-search-field input {
+  height: 100%;
+  font-size: var(--yp-type-sm) !important;
+}
+
+.public-cta,
+.public-cta-primary,
+.public-cta-ghost,
+.hero-cta,
+.hero-cta-primary,
+.hero-cta-ghost,
+.btn-primary,
+.btn-secondary,
+.home-card-cta,
+.space-cta,
+.event-cta,
+.club-cta,
+a.home-card-cta,
+button.home-card-cta {
+  height: var(--yp-control) !important;
+  min-height: var(--yp-control) !important;
+  border-radius: 999px !important;
+  font-size: var(--yp-type-sm) !important;
+  font-weight: 700 !important;
+  padding: 0 1.15rem !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.public-cta-primary,
+.hero-cta-primary,
+.btn-primary {
+  background: var(--yp-lime) !important;
+  color: #1a1a1a !important;
+  border: none !important;
+}
+
+.public-cta-ghost,
+.hero-cta-ghost,
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.72) !important;
+  color: #1a1a1a !important;
+}
+
+.home-card-cta,
+.space-cta,
+.event-cta {
+  background: var(--yp-lime) !important;
+  color: #1a1a1a !important;
+  border: none !important;
+}
+
+/* Карточки одной сетки */
+.home-card,
+.space-card,
+.event-card,
+.club-card,
+.project-card,
+.catalog-card {
+  border-radius: var(--yp-radius-card) !important;
+}
+
+.home-card-title,
+.space-card-title,
+.event-card-title {
+  font-size: 1.05rem !important;
+  line-height: 1.3 !important;
+}
+
+.home-card-text,
+.space-card-text,
+.event-card-meta {
+  font-size: var(--yp-type-sm) !important;
+  line-height: 1.45 !important;
+}
+
+.home-kicker,
+.section-kicker {
+  font-size: 0.68rem !important;
+  letter-spacing: 0.14em !important;
+}
+
+.home-title,
+.section-title,
+.page-title {
+  font-size: clamp(1.35rem, 2vw, 1.75rem) !important;
+  line-height: 1.2 !important;
+}
+
+.home-lead,
+.section-lead {
+  font-size: var(--yp-type-sm) !important;
+}
+
+/* Кабинет: пункты меню одной высоты */
+.dashboard-nav-item,
+.admin-nav-item,
+.admin-sidebar a,
+.ops-nav a {
+  min-height: var(--yp-control) !important;
+  height: auto !important;
+  border-radius: var(--yp-radius-control) !important;
+  font-size: var(--yp-type-sm) !important;
+  padding: 0 0.85rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.55rem !important;
+}
+
+.dashboard-nav-icon,
+.admin-nav-icon {
+  width: 1.15rem !important;
+  height: 1.15rem !important;
+}
+
+.dashboard-nav-label {
+  font-size: 0.68rem !important;
+  letter-spacing: 0.1em !important;
+}
+
+.dashboard-title {
+  font-size: 1.5rem !important;
+}
+
+.dashboard-subtitle {
+  font-size: var(--yp-type-sm) !important;
+}
+
+/* Ops KPI / карточки */
+.admin-stat,
+.ops-kpi,
+.kpi-card,
+.stat-card {
+  border-radius: var(--yp-radius-card) !important;
+  padding: 1rem 1.15rem !important;
+}
+
+.admin-stat-value,
+.kpi-value {
+  font-size: 1.5rem !important;
+}
+
+/* Пагинация */
+.catalog-pagination,
+.catalog-pagination-bar {
+  gap: 0.5rem;
+}
+
+.catalog-pagination a,
+.catalog-pagination button,
+.catalog-page-btn {
+  min-width: var(--yp-control) !important;
+  height: var(--yp-control) !important;
+  border-radius: var(--yp-radius-control) !important;
+  font-size: var(--yp-type-sm) !important;
+}
+
+/* Поиск каталога */
+.catalog-title-row-tools .catalog-search,
+.catalog-search {
+  height: var(--yp-control) !important;
+  min-height: var(--yp-control) !important;
+  border-radius: var(--yp-radius-control) !important;
+}
+
+.catalog-filter-btn {
+  width: var(--yp-control) !important;
+  height: var(--yp-control) !important;
+  border-radius: var(--yp-radius-control) !important;
+}
+
+/* Аватар в кабинете — тот же квадрат */
+.dashboard-profile .user-avatar,
+.dashboard-profile img.user-avatar,
+.cabinet-hero .user-avatar {
+  width: 4.5rem !important;
+  height: 4.5rem !important;
+  border-radius: 1rem !important;
+}
+
+@media (max-width: 900px) {
+  .dashboard-layout.dashboard-shell,
+  html body .dashboard-layout.dashboard-shell,
+  .admin-layout-wrapper {
+    grid-template-columns: 1fr !important;
+  }
+  html body .dashboard-aside--nav,
+  html body .dashboard-layout.dashboard-shell > .dashboard-aside {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+  .admin-dash__now {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+@media (max-width: 560px) {
+  .admin-dash__now {
+    grid-template-columns: 1fr !important;
+  }
+}
