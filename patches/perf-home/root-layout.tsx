@@ -34,7 +34,6 @@ const manrope = localFont({
   variable: '--font-manrope',
   display: 'swap',
   preload: true,
-  adjustFontFallback: true,
 });
 
 const unbounded = localFont({
