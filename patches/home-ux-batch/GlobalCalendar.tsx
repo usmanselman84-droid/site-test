@@ -102,7 +102,7 @@ export default function GlobalCalendar({ guestOpen = true }: { guestOpen?: boole
     }
   };
 
-  if (status !== 'loading' && !guestOpen && status !== 'authenticated') {
+  if (!guestOpen && status !== 'authenticated') {
     return (
       <div className="afisha-guest-note">
         Календарь скрыт для гостей. <Link href="/login?callbackUrl=/events">Войдите</Link>, чтобы видеть даты и события.
