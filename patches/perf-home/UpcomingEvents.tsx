@@ -110,11 +110,12 @@ async function loadEvents(
   }).then((rows) => rows.filter((e) => !isJunkEventTitle(e.title)).slice(0, keep));
 }
 
-function loadPublicEvents(spaceId: string | undefined, withinDays: number | undefined, compact: boolean) {
+function loadPublicEvents(spaceId: string | undefined, withinDays: number | undefined, compact?: boolean) {
+  const c = Boolean(compact);
   if (isNextBuildPhase()) return Promise.resolve([] as EventRow[]);
   return unstable_cache(
-    () => loadEvents(spaceId, withinDays, undefined, compact),
-    ['upcoming-public-v1', spaceId || '-', String(withinDays ?? ''), compact ? 'c' : 'f'],
+    () => loadEvents(spaceId, withinDays, undefined, c),
+    ['upcoming-public-v1', spaceId || '-', String(withinDays ?? ''), c ? 'c' : 'f'],
     { revalidate: 60, tags: ['yp-home-catalog'] }
   )();
 }
