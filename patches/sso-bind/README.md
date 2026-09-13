@@ -20,3 +20,5 @@
 | app-version.ts | src/lib/app-version.ts |
 
 Пользователь привязывает Яндекс / VK / Telegram / Госуслуги **из кабинета** (Настройки → «Вход через соцсети»), уже войдя. Кнопки на `/login` без сессии создают новый профиль, если провайдер не вернул совпадающий email (типично Telegram).
+
+Dockerfile builder: `ENV NODE_OPTIONS="--max-old-space-size=1792"` (иначе tsc OOM на 2Gi RAM).
