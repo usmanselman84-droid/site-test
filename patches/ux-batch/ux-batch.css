@@ -1,0 +1,305 @@
+/* 1.6.189: notifications, menu rows, compact shop, dashboard paint */
+
+.yp-notif-panel,
+.yp-notif-backdrop {
+  z-index: 70000 !important;
+}
+
+.yp-notif-panel__item.is-unread {
+  background: #eef4ff !important;
+  box-shadow: inset 4px 0 0 #2563eb;
+}
+.yp-notif-panel__item-title.is-unread {
+  font-weight: 800 !important;
+}
+.yp-notif-inbox li.is-unread {
+  border-color: #2563eb !important;
+  background: #eef4ff !important;
+  box-shadow: inset 4px 0 0 #2563eb;
+}
+.yp-notif-inbox a {
+  position: relative;
+  padding-left: 1.15rem !important;
+}
+.yp-notif-inbox li.is-unread .yp-notif-inbox__dot,
+.yp-notif-inbox__dot {
+  position: absolute;
+  left: 0.4rem;
+  top: 1rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+}
+.yp-notif-inbox li.is-unread .yp-notif-inbox__dot {
+  background: #2563eb;
+}
+.yp-notif-inbox-scope {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0.65rem 0 0.35rem;
+}
+.yp-notif-inbox-scope button {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-weight: 750;
+  font-size: 0.82rem;
+}
+.yp-notif-inbox-scope button.is-on {
+  background: #1d4ed8;
+  color: #fff;
+  border-color: #1d4ed8;
+}
+
+.mobile-menu__chips--sections {
+  gap: 0.45rem !important;
+  padding: 0 0.85rem 1.25rem !important;
+}
+.mobile-menu__chips--sections .mobile-menu__chip {
+  width: 100% !important;
+  min-height: 46px !important;
+  border-radius: 14px !important;
+  justify-content: flex-start !important;
+  padding: 0.7rem 0.95rem !important;
+  background: #fff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  font-weight: 700;
+}
+.mobile-menu__section-label {
+  padding: 0.85rem 1.05rem 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+.mobile-menu__chips:not(.mobile-menu__chips--sections) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0 0.85rem 0.75rem;
+}
+.mobile-menu__chips:not(.mobile-menu__chips--sections) .mobile-menu__chip {
+  border-radius: 999px !important;
+  min-height: 40px;
+  padding: 0.4rem 0.85rem;
+  background: #f1f5f9;
+  font-weight: 700;
+}
+
+.shop-stage {
+  gap: 0.65rem !important;
+}
+.eco-panel--shop.eco-panel--luxe {
+  padding: 0.7rem 0.75rem 0.85rem !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+}
+.eco-panel--shop .eco-live-preview,
+.eco-panel--shop .eco-look,
+.eco-panel--shop .eco-panel__lead,
+.eco-panel--shop .eco-panel__faq,
+.eco-panel--shop .eco-panel__tier-bar,
+.eco-panel--shop .eco-panel__level-blurb {
+  display: none !important;
+}
+.eco-panel--shop .eco-panel__head h4 {
+  font-size: 0.88rem !important;
+}
+.eco-panel--shop .eco-panel__balance {
+  font-size: 1.15rem !important;
+}
+.eco-panel--shop .eco-panel__catalog,
+.eco-panel--luxe .eco-panel__slot-group .eco-panel__catalog {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.4rem !important;
+}
+.eco-panel--shop .eco-shop-card,
+.eco-panel--luxe .eco-shop-card {
+  padding: 0.45rem 0.5rem !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+.eco-panel--shop .eco-shop-card:hover,
+.eco-panel--luxe .eco-shop-card:hover {
+  transform: none !important;
+}
+.eco-panel--luxe .eco-panel__slot-group {
+  box-shadow: none !important;
+  margin: 0.35rem 0 0 !important;
+}
+.dashboard-page .player-hud,
+.dashboard-stack .player-hud {
+  animation: none !important;
+}
+.dashboard-page {
+  content-visibility: visible;
+}
+.cabinet-desk,
+.dashboard-stack,
+.shop-stage {
+  contain: layout style;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eco-panel--luxe .eco-shop-card,
+  .yp-pack-shine {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.yp-notif-inbox-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.45rem 0 0.2rem;
+}
+.yp-notif-inbox-types button {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: #334155;
+}
+.yp-notif-inbox-types button.is-on {
+  background: #0f172a;
+  color: #fff;
+  border-color: #0f172a;
+}
+
+/* Header: avatar = same 34px circle as search/bell, no «Кабинет» chip */
+.nav-profile-chip__label,
+.nav-account-trigger::after,
+.nav-auth-mobile__profile::after {
+  display: none !important;
+  content: none !important;
+}
+html .site-header .nav-account-trigger,
+html .site-header .nav-auth-mobile__profile,
+html .site-header .nav-account-trigger.nav-icon-btn,
+html .site-header .nav-icon-btn.nav-account-trigger,
+html .glass-nav-end .nav-auth-mobile__profile,
+html .nav-account-trigger.has-photo,
+html .nav-auth-mobile__profile.has-photo {
+  width: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  gap: 0 !important;
+  background: #fff !important;
+  border: 1.5px solid #afca03 !important;
+  box-shadow: none !important;
+}
+html .site-header .nav-account-trigger .nav-profile-chip,
+html .site-header .nav-auth-mobile__profile .nav-profile-chip {
+  width: 100% !important;
+  height: 100% !important;
+  gap: 0 !important;
+}
+html .site-header .nav-account-trigger .nav-avatar-photo,
+html .site-header .nav-auth-mobile__profile .nav-avatar-photo,
+html .site-header .nav-profile-chip__mark {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+}
+
+/* Space between logo and menu */
+.glass-nav-inner {
+  gap: 1.35rem !important;
+}
+.site-brand-nav {
+  margin-right: 0.35rem !important;
+}
+.desktop-nav {
+  padding-left: 0.85rem !important;
+  gap: 1.35rem !important;
+}
+
+@media (min-width: 900px) {
+  html body .dashboard-layout,
+  html body .dashboard-layout.dashboard-shell {
+    grid-template-columns: 320px minmax(0, 1fr) !important;
+  }
+  html body .dashboard-aside--nav,
+  html body .dashboard-layout.dashboard-shell > .dashboard-aside {
+    width: 320px !important;
+    min-width: 320px !important;
+    max-width: 320px !important;
+  }
+}
+@media (min-width: 1280px) {
+  html body .dashboard-layout.dashboard-shell {
+    grid-template-columns: 352px minmax(0, 1fr) !important;
+  }
+  html body .dashboard-aside--nav,
+  html body .dashboard-layout.dashboard-shell > .dashboard-aside {
+    width: 352px !important;
+    min-width: 352px !important;
+    max-width: 352px !important;
+  }
+}
+.dashboard-aside--nav {
+  min-width: 0;
+}
+.dashboard-nav--labeled .dashboard-nav-btn,
+.dashboard-nav.dashboard-nav--labeled .dashboard-nav-btn {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  justify-content: flex-start !important;
+}
+.dashboard-nav-btn span.dashboard-nav-label,
+.dashboard-nav--labeled .dashboard-nav-btn span {
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: nowrap !important;
+}
+
+.dashboard-aside-foot-link,
+.dashboard-aside-foot .dashboard-admin-btn,
+.dashboard-aside-foot-link--home,
+.dashboard-aside-foot-link--logout {
+  width: 100% !important;
+  min-height: 44px !important;
+  border-radius: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  font-size: 0.88rem !important;
+  font-weight: 750 !important;
+  padding: 0.55rem 0.75rem !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  border-width: 1.5px !important;
+  border-style: solid !important;
+}
+.dashboard-aside-foot-link--home {
+  background: #06344a !important;
+  border-color: #06344a !important;
+  color: #fff !important;
+}
+.dashboard-aside-foot .dashboard-admin-btn {
+  background: #fff !important;
+  border-color: rgba(6, 52, 74, 0.22) !important;
+  color: #06344a !important;
+}
+.dashboard-aside-foot-link--logout {
+  background: #fff !important;
+  border-color: rgba(6, 52, 74, 0.22) !important;
+  color: #06344a !important;
+}
