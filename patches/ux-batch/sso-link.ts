@@ -70,6 +70,51 @@ export async function listLinkedProviders(userId: string) {
   };
 }
 
+type OauthBits = {
+  provider: string;
+  providerAccountId: string;
+  type?: string | null;
+  access_token?: string | null;
+  refresh_token?: string | null;
+  expires_at?: number | null;
+  token_type?: string | null;
+  scope?: string | null;
+  id_token?: string | null;
+  session_state?: string | null;
+};
+
+/** Bind OAuth identity to the logged-in profile (moves it off a duplicate if needed). */
+export async function attachOauthToCurrentUser(sid: string, account: OauthBits) {
+  const providerAccountId = String(account.providerAccountId);
+  const existing = await prisma.account.findUnique({
+    where: { provider_providerAccountId: { provider: account.provider, providerAccountId } },
+  });
+  await prisma.account.deleteMany({
+    where: { userId: sid, provider: account.provider, NOT: { providerAccountId } },
+  });
+  const data = {
+    userId: sid,
+    type: account.type || 'oauth',
+    provider: account.provider,
+    providerAccountId,
+    access_token: account.access_token ?? undefined,
+    refresh_token: account.refresh_token ?? undefined,
+    expires_at: account.expires_at ?? undefined,
+    token_type: account.token_type ?? undefined,
+    scope: account.scope ?? undefined,
+    id_token: account.id_token ?? undefined,
+    session_state: account.session_state ?? undefined,
+  };
+  if (!existing) {
+    await prisma.account.create({ data });
+    return;
+  }
+  await prisma.account.update({
+    where: { id: existing.id },
+    data,
+  });
+}
+
 export async function unlinkProvider(userId: string, provider: SsoProviderId) {
   const state = await listLinkedProviders(userId);
   const remainingOauth = state.linked.filter((p) => p !== provider);
