@@ -495,6 +495,7 @@ html.has-session .nav-auth-authed {
   }
   .mobile-menu__chips--sections .mobile-menu__chip {
     width: auto !important;
+    max-width: 100% !important;
     flex: 0 0 auto !important;
     min-height: 2.15rem !important;
     padding: 0.3rem 0.7rem !important;
@@ -502,6 +503,10 @@ html.has-session .nav-auth-authed {
     font-weight: 700 !important;
     justify-content: center !important;
     background: #fff !important;
+  }
+  .mobile-menu__chips--sections .mobile-menu__chip::after,
+  .mobile-menu__chips--sections .mobile-menu__chip svg {
+    display: none !important;
   }
   .mobile-menu__chips:not(.mobile-menu__chips--sections) {
     display: flex !important;
@@ -526,16 +531,21 @@ html.has-session .nav-auth-authed {
 }
 
 .nav-profile-card__avatar,
-.nav-profile-card--sheet .nav-profile-card__avatar {
+.nav-profile-card--sheet .nav-profile-card__avatar,
+.nav-profile-card .user-avatar-wrap {
   width: 40px !important;
   height: 40px !important;
   min-width: 40px !important;
   max-width: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
   flex: 0 0 40px !important;
   border-radius: 10px !important;
   overflow: hidden !important;
   border: 1.5px solid #afca03 !important;
   background: #fff !important;
+  transform: none !important;
+  contain: strict;
 }
 .nav-profile-card__avatar img,
 .nav-profile-card__avatar .user-avatar-wrap,
