@@ -75,7 +75,7 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
   const [catalog, setCatalog] = useState<CatalogItem[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [shopOpen, setShopOpen] = useState(resolvedMode === 'shop' || resolvedMode === 'full');
-  const [openSlot, setOpenSlot] = useState<CosmeticSlot | null>('frame');
+  const [openSlot, setOpenSlot] = useState<CosmeticSlot | 'all'>('all');
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [fitReveal, setFitReveal] = useState<CatalogItem | null>(null);
   const [shopTab, setShopTab] = useState<'look' | 'boosts'>('look');
@@ -504,7 +504,10 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
           </button>
         </div>
       ) : (
-        <p className="eco-panel__lead">Выберите слот и купите или наденьте предмет.</p>
+        <p className="eco-panel__lead">
+          Все слоты открыты: рамка, значок, тема, билет, аура, шапка, курсор и стиль текстов. Наведите карточку —
+          слева примерка. После «Надеть» всплывает, что именно изменилось.
+        </p>
       )}
 
       {shopOpen && (resolvedMode !== 'shop' || shopTab === 'look')
@@ -513,13 +516,15 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
               key={slot}
               className="eco-panel__slot-group"
               data-slot={slot}
-              open={openSlot === slot}
+              open={openSlot === 'all' || openSlot === slot}
             >
               <summary
                 className="eco-panel__slot-title"
                 onClick={(e) => {
                   e.preventDefault();
-                  setOpenSlot((cur) => (cur === slot ? null : (slot as CosmeticSlot)));
+                  setOpenSlot((cur) =>
+                    cur === 'all' ? (slot as CosmeticSlot) : cur === slot ? 'all' : (slot as CosmeticSlot)
+                  );
                 }}
               >
                 {(() => {
@@ -529,7 +534,7 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
                 {SLOT_LABELS[slot as CosmeticSlot] || slot}
                 <span className="eco-panel__slot-count">{items.length}</span>
               </summary>
-              {openSlot === slot ? (
+              {openSlot === 'all' || openSlot === slot ? (
               <>
               <p className="eco-panel__slot-hint">{SLOT_HINTS[slot as CosmeticSlot]}</p>
               <ul className="eco-panel__catalog eco-panel__catalog--rich eco-panel__catalog--grid">
@@ -633,7 +638,16 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
         <div className="eco-fit-modal" role="dialog" aria-modal="true" aria-labelledby="eco-fit-title">
           <button type="button" className="eco-fit-modal__back" aria-label="Закрыть" onClick={() => setFitReveal(null)} />
           <div className="eco-fit-modal__card">
-            <p className="eco-fit-modal__kicker">Надето</p>
+            <p className="eco-fit-modal__kicker">Надето — что изменилось</p>
+            <div className="eco-live-preview" style={{ margin: '0.35rem 0 0.7rem' }}>
+              <div
+                className="eco-live-preview__ring"
+                data-slot={fitReveal.slot}
+                style={{ ['--preview' as string]: (COSMETIC_PREVIEW[fitReveal.id] || { tint: '#8562d8' }).tint }}
+              >
+                <UserAvatar name={session?.user?.name} image={session?.user?.image || null} size={88} />
+              </div>
+            </div>
             <h3 id="eco-fit-title">{fitReveal.label}</h3>
             <p>
               Слот: {SLOT_LABELS[fitReveal.slot]}. {fitReveal.blurb || SLOT_HINTS[fitReveal.slot]}

@@ -265,6 +265,8 @@ export function shopFrameStyle(frameId: string | null | undefined): {
     frame_cyber: { border: '#a855f7', glow: 'rgba(168,85,247,0.5)' },
     frame_pearl: { border: '#e2e8f0', glow: 'rgba(226,232,240,0.7)' },
     frame_sunset: { border: '#f97316', glow: 'rgba(249,115,22,0.45)' },
+    frame_lime: { border: '#afca03', glow: 'rgba(175,202,3,0.5)' },
+    frame_ink: { border: '#0a0c2a', glow: 'rgba(10,12,42,0.45)' },
   };
   return map[frameId] || null;
 }

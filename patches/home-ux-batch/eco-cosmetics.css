@@ -101,6 +101,10 @@
   gap: 0.45rem;
   align-items: center;
 }
+.places-search--live button,
+.places-search--live .places-search__btn {
+  display: none !important;
+}
 .places-hero {
   min-height: 160px !important;
   border-radius: 0 0 28px 28px;
@@ -120,6 +124,39 @@
   font-size: 0.75rem;
   line-height: 1.35;
   color: var(--muted);
+}
+.eco-panel--shop .eco-panel__slot-group {
+  border: 1px solid rgba(10, 12, 42, 0.08);
+  border-radius: 16px;
+  padding: 0.35rem 0.55rem 0.7rem;
+  margin: 0.65rem 0 0;
+  background: linear-gradient(180deg, #fff, #f7f8fc);
+}
+.eco-panel__catalog--grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.65rem;
+}
+.eco-shop-card {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.7rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid rgba(10, 12, 42, 0.08);
+  box-shadow: 0 8px 20px rgba(10, 12, 42, 0.05);
+}
+.eco-shop-card.is-equipped {
+  border-color: #afca03;
+  box-shadow: 0 0 0 2px rgba(175, 202, 3, 0.35);
+}
+.eco-shop-card__visual {
+  height: 72px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--preview) 55%, white), #eef1f8);
+  font-size: 1.8rem;
 }
 .eco-fit-modal {
   position: fixed;

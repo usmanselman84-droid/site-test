@@ -110,8 +110,16 @@ export default function GlobalCalendar({ guestOpen = true }: { guestOpen?: boole
     );
   }
 
+  const isGuest = status !== 'authenticated';
+
   return (
     <div style={{ backgroundColor: 'white', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', border: '1px solid rgba(0,0,0,0.05)', overflow: 'hidden' }}>
+      {isGuest ? (
+        <p className="afisha-guest-note" style={{ margin: 0, borderRadius: 0 }}>
+          Гость видит даты. Запись на событие — после входа.{' '}
+          <Link href="/login?callbackUrl=/events">Войти</Link>
+        </p>
+      ) : null}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))' }}>
         
         {/* Calendar Side */}
@@ -253,6 +261,11 @@ export default function GlobalCalendar({ guestOpen = true }: { guestOpen?: boole
                       </div>
 
                       {new Date(event.endTime) > new Date() ? (
+                        isGuest ? (
+                          <Link href="/login?callbackUrl=/events" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', fontSize: '1rem', display: 'block', textAlign: 'center' }}>
+                            Войдите, чтобы записаться
+                          </Link>
+                        ) : (
                         <button 
                           type="button"
                           onClick={() => handleJoinEvent(event.id)}
@@ -262,6 +275,7 @@ export default function GlobalCalendar({ guestOpen = true }: { guestOpen?: boole
                         >
                           {isJoined ? '✅ Вы идете (Отменить)' : isFull ? 'Мест нет' : 'Пойду!'}
                         </button>
+                        )
                       ) : (
                          <div style={{ textAlign: 'center', color: 'var(--muted)', fontWeight: 500, fontSize: '0.9rem' }}>Мероприятие завершено</div>
                       )}
