@@ -422,8 +422,20 @@ button.home-card-cta {
 html.has-session .nav-auth-guest,
 html.has-session .nav-auth-guest .nav-pill,
 html.has-session .nav-pill--mobile-login,
-html.has-session .site-header a[href="/login"] {
+html.has-session .mobile-menu__auth-guest,
+html.has-session .mobile-menu__login,
+html.has-session .site-header a[href="/login"],
+html.has-session .glass-nav-end a[href="/login"],
+html.has-session .nav-auth-mobile a[href="/login"] {
   display: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  font-size: 0 !important;
 }
 
 html.has-session .nav-auth-authed {

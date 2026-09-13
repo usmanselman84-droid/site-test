@@ -22,6 +22,24 @@ html body .mobile-menu.is-open {
   max-height: none !important;
 }
 
+html.has-session .nav-auth-guest,
+html.has-session .nav-pill--mobile-login,
+html.has-session .mobile-menu__auth-guest,
+html.has-session a.nav-pill--mobile-login,
+html.has-session .glass-nav-end a[href="/login"],
+html.has-session .nav-auth-mobile a[href="/login"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
 @media (max-width: 860px) {
   :root {
     --yp-hero-h: calc(100dvh - var(--nav-h, 3.5rem)) !important;

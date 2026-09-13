@@ -112,12 +112,14 @@ export default function Navbar({
   const [navAvatar, setNavAvatar] = useState<string | null>(null);
 
   useLayoutEffect(() => {
-    setSessionHint(readSessionHint());
-  }, [status]);
+    if (readSessionHint() || initialSessionHint) setSessionHint(true);
+  }, [initialSessionHint]);
 
   useEffect(() => {
     if (status === 'loading') return;
-    persistSessionHint(status === 'authenticated' && Boolean(session));
+    const on = status === 'authenticated' && Boolean(session);
+    persistSessionHint(on);
+    setSessionHint(on);
   }, [status, session]);
 
   useEffect(() => {
@@ -420,7 +422,8 @@ export default function Navbar({
       pathname?.includes('/book')
   );
   const isAuthenticated = status === 'authenticated' && Boolean(session);
-  const showAuthedNav = isAuthenticated || (status === 'loading' && sessionHint);
+  const showAuthedNav = isAuthenticated || sessionHint;
+  const showGuestNav = status === 'unauthenticated' && !sessionHint;
   const authIconCount = showAuthedNav ? 2 : 3;
 
   const renderAuthIcons = () => (
@@ -428,7 +431,7 @@ export default function Navbar({
       className="nav-auth-slot"
       style={{ ['--nav-auth-slots' as string]: authIconCount }}
     >
-      {showAuthedNav ? null : (
+      {showGuestNav ? (
       <div className="nav-auth-icons nav-auth-guest">
         {onBookingFlow ? null : (
         <GuestAuthPrompt
@@ -654,7 +657,7 @@ export default function Navbar({
   /** Mobile: Запись + Вход for guests; profile icon when signed in. */
   const renderMobileHeaderActions = () => (
     <div className="nav-auth-mobile__row">
-      {onBookingFlow || showAuthedNav ? null : (
+      {showGuestNav && !onBookingFlow ? (
       <GuestAuthPrompt
         href="/coworking"
         className="nav-pill nav-pill--solid nav-pill--mobile-cta"
@@ -664,12 +667,12 @@ export default function Navbar({
       >
         Коворкинг
       </GuestAuthPrompt>
-      )}
-      {showAuthedNav ? null : (
+      ) : null}
+      {showGuestNav ? (
         <Link href="/login" className="nav-pill nav-pill--ghost nav-pill--mobile-login" title="Вход">
           Вход
         </Link>
-      )}
+      ) : null}
     </div>
   );
 
@@ -1007,7 +1010,7 @@ export default function Navbar({
                 <Search size={18} aria-hidden />
                 <input type="search" name="q" placeholder="Поиск" enterKeyHint="search" aria-label="Поиск" />
               </form>
-              {!isAuthenticated ? (
+              {showGuestNav ? (
                 <div className="mobile-menu__auth-guest">
                   <Link href="/login" onClick={closeMenu} className="mobile-menu__login btn btn-primary">
                     <User size={20} aria-hidden />
@@ -1019,19 +1022,19 @@ export default function Navbar({
                     </Link>
                   ) : null}
                 </div>
-              ) : (
+              ) : showAuthedNav ? (
                 <NavProfileCard
                   variant="sheet"
                   href={profileHref}
                   fallbackName={
-                    (session!.user as { nickname?: string | null })?.nickname || session!.user?.name
+                    (session?.user as { nickname?: string | null } | undefined)?.nickname || session?.user?.name
                   }
-                  image={navAvatar || (session!.user as { image?: string | null })?.image || null}
+                  image={navAvatar || (session?.user as { image?: string | null } | undefined)?.image || null}
                   active
                   onNavigate={closeMenu}
                   ctaLabel={isTech ? 'Открыть Ops' : isScanner ? 'Открыть сканер' : 'Открыть профиль'}
                 />
-              )}
+              ) : null}
             </div>
 
             <section className="yp-drawer-group">
