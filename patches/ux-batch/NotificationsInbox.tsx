@@ -21,6 +21,7 @@ export default function NotificationsInbox() {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [scope, setScope] = useState<'unread' | 'all'>('unread');
+  const [typeFilter, setTypeFilter] = useState<string>('');
 
   const load = useCallback(() => {
     fetch('/api/user/notifications?take=80', { credentials: 'same-origin', cache: 'no-store' })
@@ -37,13 +38,17 @@ export default function NotificationsInbox() {
   }, [load]);
 
   const unreadCount = items.filter((i) => !i.readAt).length;
-  const visible = useMemo(() => {
-    if (scope === 'unread') {
-      const u = items.filter((i) => !i.readAt);
-      return u.length ? u : items;
-    }
-    return items;
+  const typeCounts = useMemo(() => {
+    const source = scope === 'unread' ? items.filter((i) => !i.readAt) : items;
+    const map = new Map<string, number>();
+    for (const i of source) map.set(i.type, (map.get(i.type) || 0) + 1);
+    return [...map.entries()].sort((a, b) => b[1] - a[1]);
   }, [items, scope]);
+  const visible = useMemo(() => {
+    let list = scope === 'unread' ? items.filter((i) => !i.readAt) : items;
+    if (typeFilter) list = list.filter((i) => i.type === typeFilter);
+    return list;
+  }, [items, scope, typeFilter]);
 
   const mark = async (body: { all?: boolean; id?: string }) => {
     await fetch('/api/user/notifications', {
@@ -60,7 +65,7 @@ export default function NotificationsInbox() {
       <div className="profile-page-head">
         <div>
           <h1 className="profile-view__title">Уведомления</h1>
-          <p className="profile-view__lead">Сначала новые. Непрочитанные выделены слева и точкой.</p>
+          <p className="profile-view__lead">Новые, все и тип. Непрочитанные — полоса слева и точка.</p>
         </div>
         {unreadCount > 0 ? (
           <button type="button" className="btn btn-secondary" onClick={() => void mark({ all: true })}>
@@ -68,7 +73,7 @@ export default function NotificationsInbox() {
           </button>
         ) : null}
       </div>
-      <div className="yp-notif-inbox-scope" role="tablist">
+      <div className="yp-notif-inbox-scope" role="tablist" aria-label="Статус">
         <button
           type="button"
           role="tab"
@@ -81,10 +86,33 @@ export default function NotificationsInbox() {
           Все · {items.length}
         </button>
       </div>
+      {typeCounts.length > 0 ? (
+        <div className="yp-notif-inbox-types" role="group" aria-label="Тип">
+          <button type="button" className={typeFilter === '' ? 'is-on' : ''} onClick={() => setTypeFilter('')}>
+            Все типы
+          </button>
+          {typeCounts.map(([id, n]) => (
+            <button
+              key={id}
+              type="button"
+              className={typeFilter === id ? 'is-on' : ''}
+              onClick={() => setTypeFilter(id)}
+            >
+              {notificationTypeLabel(id)} · {n}
+            </button>
+          ))}
+        </div>
+      ) : null}
       {loading ? (
         <p className="profile-view__lead">Загрузка…</p>
       ) : items.length === 0 ? (
         <p className="profile-empty">Пока нет уведомлений. Покупка в магазине, заявки и сообщения появятся здесь.</p>
+      ) : visible.length === 0 ? (
+        <p className="profile-empty">
+          {scope === 'unread' && unreadCount === 0
+            ? 'Нет непрочитанных. Откройте «Все» или другой тип.'
+            : 'В этом фильтре пусто.'}
+        </p>
       ) : (
         <ul className="yp-notif-inbox">
           {visible.map((n) => {
