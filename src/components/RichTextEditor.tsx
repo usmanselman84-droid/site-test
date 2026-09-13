@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
@@ -42,7 +42,7 @@ async function uploadImage(file: File): Promise<string | null> {
   return null;
 }
 
-function MenuBar({ editor }: { editor: ReturnType<typeof useEditor> }) {
+function MenuBar({ editor }: { editor: Editor | null }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   if (!editor) return null;
 
@@ -153,7 +153,7 @@ function MenuBar({ editor }: { editor: ReturnType<typeof useEditor> }) {
 
 export default function RichTextEditor({ content, onChange }: { content: string; onChange: (html: string) => void }) {
   const [chars, setChars] = useState(0);
-  const editorRef = useRef<ReturnType<typeof useEditor>>(null);
+  const editorRef = useRef<Editor | null>(null);
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
