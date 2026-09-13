@@ -34,7 +34,7 @@ export default function HomeSlideRail({ label, children }: Props) {
 
   if (!slides.length) return null;
 
-  const showNav = slides.length > 1;
+  const showNav = slides.length > 4;
 
   return (
     <div className="home-rail-wrap">

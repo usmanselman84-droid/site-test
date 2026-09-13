@@ -449,11 +449,11 @@
     z-index: 4;
   }
   .home-rail-nav--prev {
-    left: 0 !important;
+    left: -0.15rem !important;
     right: auto !important;
   }
   .home-rail-nav--next {
-    right: 0 !important;
+    right: -0.15rem !important;
     left: auto !important;
   }
   .home-rail-nav svg {
