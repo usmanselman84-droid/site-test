@@ -721,12 +721,14 @@ export default function Navbar({
   return (
     <header className={`glass-nav${isMobileMenuOpen ? ' menu-open' : ''}${searchOpen ? ' search-open' : ''}`}>
       <div className="container glass-nav-inner">
-        <SiteBrand
-          siteName={siteSettings?.siteName}
-          logoUrl={siteSettings?.logoUrl}
-          size="header"
-          className="site-brand-nav"
-        />
+        <div onClick={closeMenu}>
+          <SiteBrand
+            siteName={siteSettings?.siteName}
+            logoUrl={siteSettings?.logoUrl}
+            size="header"
+            className="site-brand-nav"
+          />
+        </div>
 
         <nav
           ref={navRef}
@@ -1031,6 +1033,15 @@ export default function Navbar({
                 />
               )}
             </div>
+
+            <section className="yp-drawer-group">
+              <h3 className="yp-drawer-group__title">Навигация</h3>
+              <div className="yp-drawer-pills">
+                <Link href="/" onClick={closeMenu} className="yp-drawer-pill" style={getLinkStyle('/')}>
+                  Главная
+                </Link>
+              </div>
+            </section>
 
             {session && !isScanner && !isTech ? (
               <section className="yp-drawer-group">

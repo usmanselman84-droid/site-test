@@ -1,5 +1,27 @@
 /* Drawer IA + hero fill. Loaded last so brand/theme row-menu cannot win. */
 
+/* Closed drawer must not stay in the page flow (theme.css uses display:!important). */
+html body .mobile-menu:not(.is-open),
+html body .mobile-menu[hidden] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+html body .mobile-menu.is-open {
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
 @media (max-width: 860px) {
   :root {
     --yp-hero-h: calc(100dvh - var(--nav-h, 3.5rem)) !important;
