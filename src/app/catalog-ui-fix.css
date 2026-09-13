@@ -96,7 +96,7 @@
   width: 40px !important;
   height: 40px !important;
   border-radius: 10px !important;
-  border: 1.5px solid #c5d43a !important;
+  border: 1.5px solid #afca03 !important;
   background: #fff !important;
   overflow: hidden !important;
   padding: 0 !important;
@@ -107,21 +107,33 @@
   display: none !important;
 }
 
+.user-avatar-wrap,
+.user-avatar-inner,
+.user-avatar-face,
 .nav-avatar-photo,
 .nav-account-trigger img,
-.user-avatar-wrap img,
-.user-avatar-wrap > span > img,
-.user-avatar-wrap > span > div {
+.yp-profile__avatar-wrap,
+.profile-hero__avatar,
+.profile-hero__avatar-inner {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+.user-avatar-wrap > span:first-child {
+  border-radius: inherit !important;
+  overflow: hidden !important;
+}
+
+.nav-avatar-photo,
+.nav-account-trigger img,
+.nav-account-trigger .user-avatar-wrap,
+.nav-account-trigger .user-avatar-inner,
+.nav-account-trigger .user-avatar-face {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  border-radius: 8px !important;
+  object-position: center !important;
   display: block !important;
-}
-
-.user-avatar-wrap {
-  overflow: hidden !important;
-  border-radius: 10px !important;
 }
 
 .svc-pill,

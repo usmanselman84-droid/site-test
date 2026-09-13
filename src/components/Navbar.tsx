@@ -63,7 +63,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } f
 import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 import NavDropdownPortal from '@/components/NavDropdownPortal';
 import SiteBrand from '@/components/SiteBrand';
-import NavProfileCard from '@/components/NavProfileCard';
+import UserAvatar from '@/components/UserAvatar';
 import NotificationsBell from '@/components/NotificationsBell';
 import { publicPagePath } from '@/lib/public-paths';
 import { signOutLogged } from '@/lib/sign-out-logged';
@@ -466,17 +466,12 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
             aria-label="Аккаунт"
             onClick={() => setOpenMenu((m) => (m === 'account' ? null : 'account'))}
           >
-            {navAvatar ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={navAvatar}
-                alt=""
-                className="nav-avatar-photo"
-                onError={() => setNavAvatar(null)}
-              />
-            ) : (
-              <UserCircle size={20} />
-            )}
+            <UserAvatar
+              name={(session?.user as { nickname?: string | null; name?: string | null } | undefined)?.nickname || session?.user?.name}
+              image={navAvatar || session?.user?.image}
+              size={36}
+              framed={false}
+            />
           </button>
             <NavDropdownPortal
               open={openMenu === 'account'}
