@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
-import SocialAuthButtons, { type SocialAuthFlags } from '@/components/SocialAuthButtons';
+import SocialAuthButtons, { writeSsoBindCookie, type SocialAuthFlags } from '@/components/SocialAuthButtons';
 import { SSO_LABELS, type SsoProviderId } from '@/lib/sso-shared';
 
 const CALLBACK = '/dashboard/settings?section=sso&sso=linked';
@@ -75,14 +75,15 @@ export default function LinkedAccountsPanel() {
   return (
     <section className="card-surface" style={{ padding: '1rem 1.05rem', display: 'grid', gap: '0.85rem' }}>
       <div>
-        <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800 }}>Вход через соцсети</h2>
-        <p style={{ margin: '0.35rem 0 0', color: 'var(--muted)', fontSize: '0.88rem', lineHeight: 1.45 }}>
-          Можно держать на одном профиле сразу Яндекс, VK, Telegram и Госуслуги — если оператор их включил.
-          Привязывайте <strong>из этого экрана, уже войдя</strong>. Если раньше входили Яндексом со страницы «Вход»,
-          мог создаться второй профиль — кнопка «Привязать» перенесёт Яндекс на <em>этот</em> аккаунт.
-        </p>
-        <p style={{ margin: '0.35rem 0 0', color: 'var(--muted)', fontSize: '0.88rem', lineHeight: 1.45 }}>
-          Раздел «Мессенджеры» — это уведомления от ботов, не вход на сайт.
+        <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800 }}>Один профиль — все соцсети</h2>
+        <ol style={{ margin: '0.55rem 0 0', paddingLeft: '1.15rem', color: 'var(--muted)', fontSize: '0.88rem', lineHeight: 1.5 }}>
+          <li>Войдите в профиль, который оставляете (лучше с паролем).</li>
+          <li>Нажмите «Привязать» у каждой сети — Яндекс, VK, Госуслуги, Telegram.</li>
+          <li>Если сеть раньше открывала «другой» кабинет, она переедет сюда. Второй пустой профиль можно не использовать.</li>
+        </ol>
+        <p style={{ margin: '0.45rem 0 0', color: 'var(--muted)', fontSize: '0.88rem', lineHeight: 1.45 }}>
+          Не жмите соцсеть на странице «Вход», пока хотите склеить аккаунты — там открывается уже связанный профиль.
+          «Мессенджеры» — это боты, не вход.
         </p>
       </div>
 
@@ -133,10 +134,7 @@ export default function LinkedAccountsPanel() {
                   className="btn btn-primary"
                   style={{ minHeight: 36, padding: '0.3rem 0.7rem' }}
                   onClick={() => {
-                    if (bindToken) {
-                      const secure = window.location.protocol === 'https:' ? '; Secure' : '';
-                      document.cookie = `yp-sso-bind=${bindToken}; Path=/; Max-Age=600; SameSite=Lax${secure}`;
-                    }
+                    if (bindToken) writeSsoBindCookie(bindToken);
                     void signIn(id, { callbackUrl: CALLBACK });
                   }}
                 >
@@ -155,7 +153,11 @@ export default function LinkedAccountsPanel() {
           <p style={{ margin: '0 0 0.45rem', fontSize: '0.82rem', color: 'var(--muted)' }}>
             Telegram: нажмите официальную кнопку — аккаунт привяжется к текущему профилю.
           </p>
-          <SocialAuthButtons oauth={{ telegram: true, telegramBot: toBind.telegramBot }} callbackUrl={CALLBACK} />
+          <SocialAuthButtons
+            oauth={{ telegram: true, telegramBot: toBind.telegramBot }}
+            callbackUrl={CALLBACK}
+            bindToken={bindToken}
+          />
         </div>
       ) : null}
 
