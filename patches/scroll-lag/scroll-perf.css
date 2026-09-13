@@ -1,0 +1,70 @@
+/* Scroll jank: sticky blur + perpetual paint animations.
+   Worst on public profile (.yp-profile__top) and cabinet HUD. */
+
+.home-build-version {
+  display: none !important;
+}
+
+.yp-profile__top,
+.glass-nav,
+.yp-bottom-nav,
+.card-surface,
+.glass:not(.modal):not([role='dialog']) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.yp-profile__top {
+  background: #e7f3f1;
+}
+
+.glass-nav,
+html.has-bottom-nav .yp-bottom-nav,
+body.has-bottom-nav .yp-bottom-nav {
+  background: #fff !important;
+}
+
+.player-hud {
+  animation: none !important;
+}
+.player-hud__badge-glow,
+.player-hud__xp-shine {
+  display: none !important;
+  animation: none !important;
+}
+
+html[data-eco-aura='wave'] .profile-hero__avatar,
+html[data-eco-aura='wave'] .profile-hero__avatar-inner,
+.yp-eco-surface[data-eco-aura='wave'] .yp-profile__avatar-wrap {
+  animation: none !important;
+}
+
+.achievement-complete-ring,
+.avatar-legend-frame,
+.yp-card--legendary,
+html[data-eco-ticket='ticket_holo'] .yp-ticket-qr,
+html[data-eco-ticket='ticket_pulse'] .yp-ticket-qr {
+  animation: none !important;
+}
+
+.home-hero--animated .home-hero-media,
+.home-hero--animated .home-hero-glow {
+  animation: none !important;
+}
+
+html.yp-scrolling .sochi-sky,
+html.yp-scrolling .sochi-sky * {
+  animation-play-state: paused !important;
+}
+
+.yp-profile__card,
+.yp-profile__body > section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sochi-sky * {
+    animation: none !important;
+  }
+}
