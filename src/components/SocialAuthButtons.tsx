@@ -93,7 +93,7 @@ export default function SocialAuthButtons({
       window.location.assign(url.toString());
       return;
     }
-    void signIn('telegram', { callbackUrl });
+    void signIn('telegram', { callbackUrl, bindToken: bindToken || undefined });
   };
 
   useEffect(() => {
@@ -108,6 +108,7 @@ export default function SocialAuthButtons({
             redirect: true,
             callbackUrl,
             payload: JSON.stringify(user),
+            bindToken: bindToken || undefined,
           });
         },
       };

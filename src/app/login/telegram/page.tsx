@@ -42,11 +42,13 @@ export default function TelegramLoginCallbackPage() {
       return;
     }
     const bind = document.cookie.split('; ').find((c) => c.startsWith('yp-sso-bind='));
-    if (bind) writeSsoBindCookie(bind.slice('yp-sso-bind='.length));
+    const bindToken = bind ? bind.slice('yp-sso-bind='.length) : '';
+    if (bindToken) writeSsoBindCookie(bindToken);
     void signIn('telegram', {
       redirect: true,
       callbackUrl,
       payload: JSON.stringify(payload),
+      bindToken: bindToken || undefined,
     }).catch(() => setError('Не удалось войти через Telegram.'));
   }, [callbackUrl]);
 
