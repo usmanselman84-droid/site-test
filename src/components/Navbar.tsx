@@ -452,7 +452,7 @@ export default function Navbar({
           </Link>
         ) : null}
       </div>
-      )}
+      ) : null}
       <div className="nav-auth-icons nav-auth-icons--compact nav-auth-authed">
         {modOn(siteSettings, 'notifications') ? (
           <NotificationsBell compact useNavStyle />
