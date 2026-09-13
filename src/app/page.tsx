@@ -84,15 +84,6 @@ export default async function Home() {
 
   return (
     <div className="home-page home-page--lift">
-      {heroMediaKind === 'image' ? (
-        <link
-          rel="preload"
-          as="image"
-          href={heroUrl.replace(/\.(jpe?g|png)$/i, '.webp')}
-          type="image/webp"
-          fetchPriority="high"
-        />
-      ) : null}
       <HomeServiceHero
         siteName={siteName}
         imageUrl={heroUrl}

@@ -38,14 +38,14 @@ const manrope = localFont({
   ],
   variable: '--font-manrope',
   display: 'swap',
-  preload: true,
+  preload: false,
 });
 
 const unbounded = localFont({
   src: [{ path: '../fonts/unbounded/Unbounded-700.woff2', weight: '700', style: 'normal' }],
   variable: '--font-unbounded',
   display: 'swap',
-  preload: true,
+  preload: false,
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -124,7 +124,7 @@ export default async function RootLayout({
           id="yp-chrome-boot"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var p=location.pathname||'';var staff=p.indexOf('/admin')===0||p.indexOf('/scanner')===0;var ops=p.indexOf('/ops')===0;var gamesPlay=p.indexOf('/games/')===0;var immersive=staff||ops||gamesPlay||p.indexOf('/login')===0||p.indexOf('/register')===0||p.indexOf('/verify')===0||p.indexOf('/maintenance')===0||p.indexOf('/presentation/view')===0||p.indexOf('/forgot-password')===0||p.indexOf('/reset-password')===0;document.documentElement.classList.add('yp-booting');if(staff){document.documentElement.classList.add('is-admin');document.body.classList.add('is-admin')}if(ops){document.documentElement.classList.add('is-ops');document.body.classList.add('is-ops')}try{if(localStorage.getItem('yp-session')==='1'||(document.cookie||'').indexOf('yp-session=1')!==-1){document.documentElement.classList.add('has-session')}}catch(e){}if(!immersive){try{if(localStorage.getItem('yp-dock')==='1'&&window.matchMedia('(max-width:860px)').matches){document.documentElement.classList.add('has-bottom-nav');document.body.classList.add('has-bottom-nav')}}catch(e){}}setTimeout(function(){document.documentElement.classList.remove('yp-booting')},3000)}catch(e){}})();`,
+            __html: `(function(){try{var p=location.pathname||'';var staff=p.indexOf('/admin')===0||p.indexOf('/scanner')===0;var ops=p.indexOf('/ops')===0;var gamesPlay=p.indexOf('/games/')===0;var immersive=staff||ops||gamesPlay||p.indexOf('/login')===0||p.indexOf('/register')===0||p.indexOf('/verify')===0||p.indexOf('/maintenance')===0||p.indexOf('/presentation/view')===0||p.indexOf('/forgot-password')===0||p.indexOf('/reset-password')===0;document.documentElement.classList.add('yp-booting');if(staff){document.documentElement.classList.add('is-admin');document.body.classList.add('is-admin')}if(ops){document.documentElement.classList.add('is-ops');document.body.classList.add('is-ops')}var sessionOn=false;try{sessionOn=localStorage.getItem('yp-session')==='1'||(document.cookie||'').indexOf('yp-session=1')!==-1}catch(e){}if(sessionOn){document.documentElement.classList.add('has-session')}if(!immersive){try{var mobile=window.matchMedia('(max-width:860px)').matches;if(mobile&&(localStorage.getItem('yp-dock')==='1'||sessionOn)){document.documentElement.classList.add('has-bottom-nav');document.body.classList.add('has-bottom-nav');document.documentElement.style.setProperty('--yp-bottom-nav-h','calc(4.15rem + env(safe-area-inset-bottom, 0px))')}}catch(e){}}setTimeout(function(){document.documentElement.classList.remove('yp-booting')},800)}catch(e){}})();`,
           }}
         />
         <Script

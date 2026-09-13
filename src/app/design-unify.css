@@ -346,13 +346,15 @@ button.home-card-cta {
 
 /* Hero: full remaining viewport, no glow/shadow halo */
 :root {
+  --yp-dock-h: calc(4.15rem + env(safe-area-inset-bottom, 0px));
   --yp-hero-h: calc(100svh - var(--nav-h, 3.75rem) - env(safe-area-inset-top, 0px));
 }
 @media (max-width: 860px) {
-  :root,
+  html.has-session,
   html.has-bottom-nav,
   body.has-bottom-nav {
-    --yp-hero-h: calc(100svh - var(--nav-h, 3.75rem) - env(safe-area-inset-top, 0px) - var(--yp-bottom-nav-h, calc(4.15rem + env(safe-area-inset-bottom, 0px))));
+    --yp-bottom-nav-h: var(--yp-dock-h);
+    --yp-hero-h: calc(100svh - var(--nav-h, 3.75rem) - env(safe-area-inset-top, 0px) - var(--yp-bottom-nav-h));
   }
 }
 
@@ -363,6 +365,7 @@ button.home-card-cta {
   min-height: var(--yp-hero-h) !important;
   height: var(--yp-hero-h) !important;
   max-height: var(--yp-hero-h) !important;
+  overflow: hidden !important;
 }
 
 .lift-hero__stage,
@@ -456,4 +459,132 @@ html.has-session .nav-auth-authed {
   background: #fff;
   padding-top: 0.85rem;
   z-index: 2;
+}
+
+/* Mobile menu + hero CTAs */
+@media (max-width: 860px) {
+  .mobile-menu-btn.nav-icon-btn {
+    width: var(--yp-control) !important;
+    height: var(--yp-control) !important;
+    border-radius: var(--yp-radius-control) !important;
+    border: 1.5px solid var(--yp-lime) !important;
+    background: #fff !important;
+  }
+  .lift-hero__btn {
+    min-height: var(--yp-control) !important;
+    font-weight: 800 !important;
+  }
+  .mobile-menu {
+    padding: 0.85rem 1rem 1.25rem !important;
+  }
+  .mobile-menu__search {
+    height: var(--yp-control) !important;
+    border-radius: var(--yp-radius-control) !important;
+  }
+  .mobile-menu__chip,
+  .mobile-menu a.mobile-menu__chip {
+    min-height: 2.75rem !important;
+    border-radius: 12px !important;
+    padding: 0 0.9rem !important;
+  }
+}
+
+/* Avatars: rounded square, not a squeezed circle */
+.profile-hero__avatar,
+.profile-hero__avatar-inner,
+.profile-hero__avatar img,
+.mobile-menu .user-avatar-wrap,
+.mobile-menu .user-avatar-inner,
+.mobile-menu .user-avatar-face,
+.nav-profile-chip img,
+.mobile-menu__auth img {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+.profile-hero__avatar {
+  width: 4.5rem !important;
+  height: 4.5rem !important;
+}
+
+/* QR fullscreen close always on top */
+.presence-fs-close {
+  position: fixed !important;
+  top: max(0.75rem, env(safe-area-inset-top)) !important;
+  right: max(0.75rem, env(safe-area-inset-right)) !important;
+  z-index: 40010 !important;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+}
+
+/* Reliability sheet: list scrolls, last row not clipped */
+.rep-modal-backdrop {
+  align-items: flex-end !important;
+  place-items: unset !important;
+  display: flex !important;
+  justify-content: center !important;
+  padding: 0.75rem !important;
+}
+.rep-modal,
+.rep-modal--wide,
+.rep-modal--game {
+  max-height: min(88dvh, 42rem) !important;
+  width: min(28rem, 100%) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.rep-modal__list {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  padding: 0.35rem 1rem 1.35rem !important;
+}
+
+/* Shop: denser cards, no repeated essays */
+.eco-shop-card__blurb,
+.eco-panel__slot-hint {
+  display: none !important;
+}
+.eco-panel__catalog--grid {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.55rem !important;
+}
+.eco-shop-card {
+  padding: 0.7rem 0.65rem 0.75rem !important;
+  gap: 0.4rem !important;
+}
+.eco-shop-card__meta {
+  font-size: 0.75rem !important;
+}
+
+/* Admin pages must scroll on phone */
+html.is-admin,
+body.is-admin {
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: 100dvh !important;
+}
+.admin-layout-wrapper {
+  height: auto !important;
+  min-height: 100dvh !important;
+  overflow: visible !important;
+  overflow-x: clip !important;
+}
+.admin-main {
+  overflow: visible !important;
+  padding-bottom: 5rem !important;
+}
+
+/* Settings: breathing room from edges */
+.svc-settings-page,
+.profile-settings-hub,
+.profile-section {
+  padding-left: 0.15rem;
+  padding-right: 0.15rem;
+}
+.profile-choice {
+  padding: 0.75rem 0.85rem !important;
 }
