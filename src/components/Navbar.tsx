@@ -63,6 +63,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } f
 import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 import NavDropdownPortal from '@/components/NavDropdownPortal';
 import SiteBrand from '@/components/SiteBrand';
+import NavProfileCard from '@/components/NavProfileCard';
 import UserAvatar from '@/components/UserAvatar';
 import NotificationsBell from '@/components/NotificationsBell';
 import { publicPagePath } from '@/lib/public-paths';
