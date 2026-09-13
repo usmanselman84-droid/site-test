@@ -413,3 +413,47 @@ html.has-session .site-header a[href="/login"] {
 html.has-session .nav-auth-authed {
   display: inline-flex !important;
 }
+
+/* Cookie / privacy overlays: whole dialog on screen, actions reachable */
+.yp-onboard-sheet.yp-cookie-banner,
+.yp-cookie-banner {
+  justify-content: center !important;
+  align-items: center !important;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom)) !important;
+  overflow-y: auto !important;
+  inset: 0 !important;
+  height: 100dvh !important;
+}
+
+.yp-cookie-banner .yp-onboard-sheet__body {
+  margin: auto !important;
+  width: min(28rem, calc(100% - 0.5rem)) !important;
+  max-height: min(88dvh, 40rem) !important;
+  overflow: auto !important;
+}
+
+.privacy-gate {
+  overflow-y: auto !important;
+  align-items: flex-start !important;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom)) !important;
+}
+
+.privacy-gate__card {
+  margin: auto !important;
+  max-height: none !important;
+  width: min(28rem, 100%) !important;
+}
+
+.privacy-gate .legal-diff__body,
+.privacy-gate .legal-diff {
+  max-height: 36vh;
+  overflow: auto;
+}
+
+.privacy-gate__actions {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding-top: 0.85rem;
+  z-index: 2;
+}
