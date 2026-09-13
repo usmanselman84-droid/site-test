@@ -51,7 +51,7 @@ export default function TelegramLoginCallbackPage() {
   }, [callbackUrl]);
 
   return (
-    <main className="yp-auth-card" style={{ margin: '4rem auto', maxWidth: 24rem, textAlign: 'center' }}>
+    <main className="yp-auth-card" style={{ margin: '4rem auto', maxWidth: '24rem', textAlign: 'center' }}>
       <p>{error || 'Входим через Telegram…'}</p>
       {error ? (
         <p>
