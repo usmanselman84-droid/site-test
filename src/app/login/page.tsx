@@ -38,8 +38,19 @@ function mapAuthError(rawIn: string, fallback: string) {
   } catch {
     /* keep */
   }
-  if (!raw || raw === 'CredentialsSignin' || raw === 'undefined' || raw === 'OAuthAccountNotLinked') {
+  if (!raw || raw === 'CredentialsSignin' || raw === 'undefined') {
     return fallback;
+  }
+  if (
+    raw === 'OAuthAccountNotLinked' ||
+    raw === 'OAuthCallback' ||
+    raw === 'OAuthSignin' ||
+    raw === 'OAuthCreateAccount' ||
+    raw === 'Callback' ||
+    raw === 'AccessDenied' ||
+    raw === 'Configuration'
+  ) {
+    return 'Вход через соцсеть сейчас не сработал. Войдите email (или телефоном) и паролем. Если пароля нет — страница «Забыли пароль».';
   }
   return raw;
 }
@@ -51,6 +62,7 @@ function LoginForm() {
   const [captchaToken, setCaptchaToken] = useState('');
   const [oauth, setOauth] = useState<SocialAuthFlags>({});
   const [esiaOn, setEsiaOn] = useState(false);
+  const [ssoAvailable, setSsoAvailable] = useState(true);
   const [authTicket, setAuthTicket] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -86,6 +98,7 @@ function LoginForm() {
           d?.modules?.registration !== false;
         setRegistrationOn(reg);
         setEsiaOn(Boolean(d?.esiaLoginEnabled));
+        if (typeof d?.ssoAvailable === 'boolean') setSsoAvailable(d.ssoAvailable);
       })
       .catch(() => undefined);
     return () => {
@@ -334,7 +347,7 @@ function LoginForm() {
     fetch('/api/public/status')
       .then((r) => r.json())
       .then((d) => {
-        if (d?.oauth) {
+                if (d.oauth) {
           setOauth({
             yandex: Boolean(d.oauth.yandex),
             vk: Boolean(d.oauth.vk),
@@ -344,8 +357,12 @@ function LoginForm() {
             esia: Boolean(d.oauth.esia),
           });
         }
+        if (typeof d?.ssoAvailable === 'boolean') setSsoAvailable(d.ssoAvailable);
       })
-      .catch(() => setOauth({}));
+      .catch(() => {
+        setOauth({});
+        setSsoAvailable(false);
+      });
   }, []);
 
   return (
@@ -370,7 +387,9 @@ function LoginForm() {
           </p>
         )}
         {!needs2fa && !staffMode && !maintenanceOn ? (
-          <p className="yp-auth-lead">Профили и персональные данные доступны только после входа.</p>
+          <p className="yp-auth-lead">
+            Основной вход — email или телефон и пароль. Соцсети — дополнительный способ, если сервис отвечает.
+          </p>
         ) : null}
 
         {sessionStatus === 'authenticated' && maintenanceOn && !isStaffSession && (
@@ -418,6 +437,13 @@ function LoginForm() {
           </div>
         ) : null}
 
+        {!needs2fa && !ssoAvailable ? (
+          <p className="yp-auth-alert yp-auth-alert--warn" style={{ marginBottom: '1rem' }}>
+            Соцсети сейчас не отвечают. Войдите email или телефоном и паролем.{' '}
+            <Link href="/forgot-password">Нет пароля — восстановить доступ</Link>
+          </p>
+        ) : null}
+
         <form ref={formRef} onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {!needs2fa ? (
             <>
@@ -463,8 +489,8 @@ function LoginForm() {
               </div>
 
               <div style={{ textAlign: 'right', marginTop: '-0.5rem' }}>
-                <Link href="/forgot-password" style={{ color: 'var(--muted)', fontSize: '0.85rem', textDecoration: 'none' }}>
-                  Забыли пароль?
+                <Link href="/forgot-password" style={{ color: 'var(--primary)', fontSize: '0.88rem', fontWeight: 700, textDecoration: 'none' }}>
+                  Забыли пароль или нет входа через соцсеть?
                 </Link>
               </div>
 
@@ -520,8 +546,11 @@ function LoginForm() {
           <>
             <SocialAuthButtons oauth={oauth} callbackUrl={callbackUrl} showEsia={esiaOn} />
             <p style={{ textAlign: 'center', marginTop: '0.85rem', fontSize: '0.82rem', lineHeight: 1.45, color: 'var(--muted)' }}>
-              Уже есть аккаунт с почтой? Войдите паролем, затем привяжите сети в кабинете. Кнопка соцсети здесь открывает
-              тот профиль, который с ней уже связан — так появляются дубликаты.
+              Почта и пароль работают без Яндекса и Telegram. Соцсеть на этой странице открывает уже связанный профиль —
+              чтобы склеить аккаунты, сначала войдите паролем, затем привяжите сеть в кабинете.{' '}
+              <Link href="/forgot-password" style={{ color: 'var(--primary)', fontWeight: 700 }}>
+                Восстановить доступ
+              </Link>
             </p>
           </>
         ) : null}

@@ -3,7 +3,7 @@
 import { useSafeSearchParams } from '@/lib/use-safe-search-params';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   AlertTriangle,
@@ -57,7 +57,7 @@ const SECTIONS: {
   icon: typeof ShieldCheck;
 }[] = [
   { id: 'privacy', title: 'Публичность', desc: 'Кто видит профиль и «в сети»', icon: UserRound },
-  { id: 'password', title: 'Пароль', desc: 'Смена пароля входа', icon: KeyRound },
+  { id: 'password', title: 'Пароль', desc: 'Задать или сменить пароль на случай, если соцсеть недоступна', icon: KeyRound },
   { id: 'sso', title: 'Вход через соцсети', desc: 'Собрать Яндекс, VK, Telegram на одном профиле', icon: Link2 },
   { id: 'security', title: 'Безопасность', desc: 'Устройства, 2FA, удаление', icon: ShieldCheck },
   { id: 'consents', title: 'Согласия', desc: 'Политика и cookie', icon: BadgeCheck },
@@ -110,6 +110,87 @@ type Props = {
   embedded?: boolean;
   onClose?: () => void;
 };
+
+function PasswordFallbackForm({
+  profileSaving,
+  setProfileSaving,
+  readJsonSafe,
+}: {
+  profileSaving: boolean;
+  setProfileSaving: (v: boolean) => void;
+  readJsonSafe: (res: Response) => Promise<any>;
+}) {
+  const [hasPassword, setHasPassword] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/user/sso', { cache: 'no-store', credentials: 'same-origin' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!cancelled && d) setHasPassword(Boolean(d.hasPassword));
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <section className="profile-section" aria-label="Пароль">
+      <p className="profile-settings-hub__hint">
+        {hasPassword
+          ? 'Минимум 10 символов, буквы и цифры.'
+          : 'Вы входили через соцсеть, пароля ещё нет. Задайте его сейчас — им можно войти, если Яндекс или Telegram недоступны. Также сохраните фразу из 24 слов в «Безопасность».'}
+      </p>
+      <form
+        className="profile-password-form"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const fd = new FormData(e.currentTarget);
+          const currentPassword = String(fd.get('currentPassword') || '');
+          const password = String(fd.get('password') || '');
+          if (password.length < 10 || !/[A-Za-zА-Яа-я]/.test(password) || !/\d/.test(password)) {
+            toast.error('Пароль: минимум 10 символов, буквы и цифры');
+            return;
+          }
+          setProfileSaving(true);
+          try {
+            const res = await fetch('/api/user/profile', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ currentPassword, password }),
+            });
+            const json = (await readJsonSafe(res)) || {};
+            if (!res.ok) throw new Error(json.message || 'Не удалось сменить пароль');
+            toast.success(hasPassword ? 'Пароль обновлён' : 'Пароль задан — им можно входить без соцсети');
+            e.currentTarget.reset();
+            setHasPassword(true);
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Ошибка');
+          } finally {
+            setProfileSaving(false);
+          }
+        }}
+      >
+        {hasPassword ? (
+          <label className="yp-field">
+            <span>Текущий пароль</span>
+            <input name="currentPassword" type="password" autoComplete="current-password" required />
+          </label>
+        ) : null}
+        <label className="yp-field">
+          <span>{hasPassword ? 'Новый пароль' : 'Пароль для входа без соцсети'}</span>
+          <input name="password" type="password" autoComplete="new-password" minLength={10} required />
+        </label>
+        <div className="yp-form-z">
+          <button type="submit" className="btn btn-primary" disabled={profileSaving}>
+            {hasPassword ? 'Обновить пароль' : 'Задать пароль'}
+          </button>
+        </div>
+      </form>
+    </section>
+  );
+}
 
 function parseSection(raw: string | null): SettingsSectionId {
   const v = String(raw || '').trim().toLowerCase();
@@ -326,52 +407,11 @@ export default function DashboardSettingsHub({
       {section === 'sso' ? <LinkedAccountsPanel /> : null}
 
       {section === 'password' ? (
-        <section className="profile-section" aria-label="Пароль">
-          <p className="profile-settings-hub__hint">Минимум 10 символов, буквы и цифры.</p>
-          <form
-            className="profile-password-form"
-            onSubmit={async (e) => {
-              e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              const currentPassword = String(fd.get('currentPassword') || '');
-              const password = String(fd.get('password') || '');
-              if (password.length < 10 || !/[A-Za-zА-Яа-я]/.test(password) || !/\d/.test(password)) {
-                toast.error('Пароль: минимум 10 символов, буквы и цифры');
-                return;
-              }
-              setProfileSaving(true);
-              try {
-                const res = await fetch('/api/user/profile', {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ currentPassword, password }),
-                });
-                const json = (await readJsonSafe(res)) || {};
-                if (!res.ok) throw new Error(json.message || 'Не удалось сменить пароль');
-                toast.success('Пароль обновлён');
-                e.currentTarget.reset();
-              } catch (err) {
-                toast.error(err instanceof Error ? err.message : 'Ошибка');
-              } finally {
-                setProfileSaving(false);
-              }
-            }}
-          >
-            <label className="yp-field">
-              <span>Текущий пароль</span>
-              <input name="currentPassword" type="password" autoComplete="current-password" required />
-            </label>
-            <label className="yp-field">
-              <span>Новый пароль</span>
-              <input name="password" type="password" autoComplete="new-password" minLength={10} required />
-            </label>
-            <div className="yp-form-z">
-              <button type="submit" className="btn btn-primary" disabled={profileSaving}>
-                Обновить пароль
-              </button>
-            </div>
-          </form>
-        </section>
+        <PasswordFallbackForm
+          profileSaving={profileSaving}
+          setProfileSaving={setProfileSaving}
+          readJsonSafe={readJsonSafe}
+        />
       ) : null}
 
       {section === 'security' ? (

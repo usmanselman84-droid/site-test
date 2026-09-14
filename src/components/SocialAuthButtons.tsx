@@ -127,7 +127,14 @@ export default function SocialAuthButtons({
     };
   }, [hasTg, oauth.telegramBot, oauth.telegramBotId, callbackUrl, bindToken]);
 
-  if (!hasAny) return null;
+  if (!hasAny) {
+    return (
+      <p className="yp-sso yp-sso__legal" style={{ marginTop: '1rem' }}>
+        Вход через соцсети сейчас недоступен. Используйте email или телефон и пароль — это основной способ. Если пароля
+        нет, откройте «Забыли пароль».
+      </p>
+    );
+  }
 
   return (
     <div className="yp-sso">

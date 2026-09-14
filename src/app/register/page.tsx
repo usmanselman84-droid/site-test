@@ -217,7 +217,7 @@ function RegisterForm() {
         <p className="yp-auth-brand">Молодёжь Сочи</p>
         <h1 className="yp-auth-title">Регистрация</h1>
         <p className="yp-auth-lead">
-          Имя, фамилия, email и пароль — или вход через VK, Telegram и Яндекс без пароля.
+          Надёжный способ — имя, email и пароль. Соцсети можно подключить позже, если они доступны.
         </p>
 
         {registrationEnabled ? (
