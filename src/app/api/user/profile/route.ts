@@ -370,7 +370,11 @@ export async function PUT(req: Request) {
         if (!data.currentPassword) {
           return NextResponse.json({ message: 'Укажите текущий пароль' }, { status: 400 });
         }
-        const ok = await bcrypt.compare(data.currentPassword, me.password);
+        const stored = me?.password;
+        if (!stored) {
+          return NextResponse.json({ message: 'Пароль для этого аккаунта не задан' }, { status: 400 });
+        }
+        const ok = await bcrypt.compare(data.currentPassword, stored);
         if (!ok) {
           return NextResponse.json({ message: 'Неверный текущий пароль' }, { status: 400 });
         }
