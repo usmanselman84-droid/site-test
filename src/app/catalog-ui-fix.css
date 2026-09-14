@@ -1,0 +1,197 @@
+/* Catalog / chrome UI fixes for ty (homepage rails, avatar, filters, search). */
+
+.home-page .home-rail-wrap,
+.home-page.home-page--lift .home-rail-wrap {
+  position: relative !important;
+  display: block !important;
+  grid-template-columns: none !important;
+  padding-inline: 0 !important;
+}
+
+@media (min-width: 900px) {
+  .home-page .home-rail-wrap,
+  .home-page.home-page--lift .home-rail-wrap {
+    padding-inline: 2.6rem !important;
+  }
+  .home-rail-nav {
+    position: absolute !important;
+    top: 5.4rem !important;
+    display: grid !important;
+    place-items: center !important;
+    width: 2.35rem !important;
+    height: 2.35rem !important;
+    z-index: 4;
+    margin: 0 !important;
+    align-self: auto !important;
+    place-self: auto !important;
+  }
+  .home-rail-nav--prev {
+    left: -0.15rem !important;
+    right: auto !important;
+  }
+  .home-rail-nav--next {
+    right: -0.15rem !important;
+    left: auto !important;
+  }
+}
+
+.catalog-page .catalog-page-header {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center !important;
+  gap: 0.75rem 1rem !important;
+}
+
+.catalog-page-header__search {
+  flex: 1 1 18rem !important;
+  max-width: none !important;
+  margin-left: auto !important;
+}
+
+.catalog-sticky-tags {
+  display: none !important;
+}
+
+.catalog-filter-pop {
+  isolation: isolate;
+  z-index: 30 !important;
+}
+
+.catalog-filter-pop__search,
+.space-filter-bar__search,
+.filter-bar__input,
+.catalog-page-header .catalog-filter-pop__search,
+.catalog-page-header .space-filter-bar__search {
+  height: 2.5rem !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #d7dde7 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.catalog-filter-pop__toggle,
+.space-filter-bar__toggle {
+  height: 2.5rem !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #d7dde7 !important;
+  background: #fff !important;
+}
+
+.catalog-filter-pop__panel,
+.space-filter-panel {
+  position: absolute !important;
+  top: calc(100% + 0.4rem) !important;
+  right: 0 !important;
+  z-index: 80 !important;
+  background: #fff !important;
+  opacity: 1 !important;
+  isolation: isolate;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16) !important;
+}
+
+html .site-header .nav-icon-btn,
+html .site-header .nav-icon-btn:hover,
+html .site-header .nav-icon-btn:focus,
+html .site-header .nav-icon-btn:focus-visible,
+html .site-header .nav-icon-btn:active,
+html .site-header .yp-notif-bell.is-nav-style,
+html .site-header .yp-notif-bell.is-nav-style:hover,
+html .site-header .yp-notif-bell.is-nav-style.is-open,
+html .site-header .nav-account-trigger,
+html .site-header .nav-account-trigger:hover,
+html .site-header .nav-account-trigger:focus,
+html .site-header .nav-account-trigger.has-photo {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #afca03 !important;
+  background: #fff !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+html.has-session .nav-auth-authed {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 5.4rem;
+  min-height: 40px;
+}
+
+.nav-account-chevron {
+  display: none !important;
+}
+
+.user-avatar-wrap,
+.user-avatar-inner,
+.user-avatar-face,
+.nav-avatar-photo,
+.nav-account-trigger img,
+.yp-profile__avatar-wrap,
+.profile-hero__avatar,
+.profile-hero__avatar-inner {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+.user-avatar-wrap > span:first-child {
+  border-radius: inherit !important;
+  overflow: hidden !important;
+}
+
+.nav-avatar-photo,
+.nav-account-trigger img,
+.nav-account-trigger .user-avatar-wrap,
+.nav-account-trigger .user-avatar-inner,
+.nav-account-trigger .user-avatar-face {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+}
+
+.svc-pill,
+.svc-pill--brand,
+.svc-space-card__cta,
+.svc-space-card__cta--cowork,
+.join-event-btn,
+.event-card-actions .join-event-btn {
+  border-radius: 999px !important;
+  min-height: 2.35rem !important;
+  font-weight: 800 !important;
+}
+
+.svc-pill--brand,
+.svc-space-card__cta {
+  background: #afca03 !important;
+  border-color: #afca03 !important;
+  color: #12200a !important;
+}
+
+.svc-space-card__cta--cowork {
+  background: #fff !important;
+  border: 1.5px solid #afca03 !important;
+  color: #12200a !important;
+}
+
+.event-card-cover {
+  display: block !important;
+  min-height: 8.5rem !important;
+  aspect-ratio: 16 / 9 !important;
+}
+
+.event-list.is-embedded .event-card-cover,
+.event-card--compact .event-card-cover {
+  margin: 0 !important;
+  width: 100% !important;
+  border-radius: 14px 14px 0 0 !important;
+}
